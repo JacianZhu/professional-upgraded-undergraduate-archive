@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stu.system.mapper.SysCourierCompanyMapper">
+    
+    <resultMap type="SysCourierCompany" id="SysCourierCompanyResult">
+        <result property="courierCompanyId"    column="courier_company_id"    />
+        <result property="courierCompanyName"    column="courier_company_name"    />
+        <result property="businessPerson"    column="business_person"    />
+        <result property="contactNumber"    column="contact_number"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysCourierCompanyVo">
+        select courier_company_id, courier_company_name, business_person, contact_number, create_by, create_time, update_by, update_time from sys_courier_company
+    </sql>
+
+    <select id="selectSysCourierCompanyList" parameterType="SysCourierCompany" resultMap="SysCourierCompanyResult">
+        <include refid="selectSysCourierCompanyVo"/>
+        <where>  
+            <if test="courierCompanyName != null  and courierCompanyName != ''"> and courier_company_name like concat('%', #{courierCompanyName}, '%')</if>
+            <if test="businessPerson != null  and businessPerson != ''"> and business_person = #{businessPerson}</if>
+            <if test="contactNumber != null  and contactNumber != ''"> and contact_number = #{contactNumber}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysCourierCompanyByCourierCompanyId" parameterType="Long" resultMap="SysCourierCompanyResult">
+        <include refid="selectSysCourierCompanyVo"/>
+        where courier_company_id = #{courierCompanyId}
+    </select>
+
+    <insert id="insertSysCourierCompany" parameterType="SysCourierCompany" useGeneratedKeys="true" keyProperty="courierCompanyId">
+        insert into sys_courier_company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courierCompanyName != null and courierCompanyName != ''">courier_company_name,</if>
+            <if test="businessPerson != null">business_person,</if>
+            <if test="contactNumber != null and contactNumber != ''">contact_number,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courierCompanyName != null and courierCompanyName != ''">#{courierCompanyName},</if>
+            <if test="businessPerson != null">#{businessPerson},</if>
+            <if test="contactNumber != null and contactNumber != ''">#{contactNumber},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysCourierCompany" parameterType="SysCourierCompany">
+        update sys_courier_company
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courierCompanyName != null and courierCompanyName != ''">courier_company_name = #{courierCompanyName},</if>
+            <if test="businessPerson != null">business_person = #{businessPerson},</if>
+            <if test="contactNumber != null and contactNumber != ''">contact_number = #{contactNumber},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where courier_company_id = #{courierCompanyId}
+    </update>
+
+    <delete id="deleteSysCourierCompanyByCourierCompanyId" parameterType="Long">
+        delete from sys_courier_company where courier_company_id = #{courierCompanyId}
+    </delete>
+
+    <delete id="deleteSysCourierCompanyByCourierCompanyIds" parameterType="String">
+        delete from sys_courier_company where courier_company_id in 
+        <foreach item="courierCompanyId" collection="array" open="(" separator="," close=")">
+            #{courierCompanyId}
+        </foreach>
+    </delete>
+</mapper>

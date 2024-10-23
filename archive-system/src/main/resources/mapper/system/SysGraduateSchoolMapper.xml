@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stu.system.mapper.SysGraduateSchoolMapper">
+    
+    <resultMap type="SysGraduateSchool" id="SysGraduateSchoolResult">
+        <result property="graduateSchoolId"    column="graduate_school_id"    />
+        <result property="graduateSchoolName"    column="graduate_school_name"    />
+        <result property="specialtyName"    column="specialty_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysGraduateSchoolVo">
+        select graduate_school_id, graduate_school_name, specialty_name, create_by, create_time, update_by, update_time from sys_graduate_school
+    </sql>
+
+    <select id="selectSysGraduateSchoolList" parameterType="SysGraduateSchool" resultMap="SysGraduateSchoolResult">
+        <include refid="selectSysGraduateSchoolVo"/>
+        <where>  
+            <if test="graduateSchoolName != null  and graduateSchoolName != ''"> and graduate_school_name like concat('%', #{graduateSchoolName}, '%')</if>
+            <if test="specialtyName != null  and specialtyName != ''"> and specialty_name like concat('%', #{specialtyName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectSysGraduateSchoolByGraduateSchoolId" parameterType="Long" resultMap="SysGraduateSchoolResult">
+        <include refid="selectSysGraduateSchoolVo"/>
+        where graduate_school_id = #{graduateSchoolId}
+    </select>
+
+    <insert id="insertSysGraduateSchool" parameterType="SysGraduateSchool" useGeneratedKeys="true" keyProperty="graduateSchoolId">
+        insert into sys_graduate_school
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="graduateSchoolName != null and graduateSchoolName != ''">graduate_school_name,</if>
+            <if test="specialtyName != null and specialtyName != ''">specialty_name,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="graduateSchoolName != null and graduateSchoolName != ''">#{graduateSchoolName},</if>
+            <if test="specialtyName != null and specialtyName != ''">#{specialtyName},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysGraduateSchool" parameterType="SysGraduateSchool">
+        update sys_graduate_school
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="graduateSchoolName != null and graduateSchoolName != ''">graduate_school_name = #{graduateSchoolName},</if>
+            <if test="specialtyName != null and specialtyName != ''">specialty_name = #{specialtyName},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where graduate_school_id = #{graduateSchoolId}
+    </update>
+
+    <delete id="deleteSysGraduateSchoolByGraduateSchoolId" parameterType="Long">
+        delete from sys_graduate_school where graduate_school_id = #{graduateSchoolId}
+    </delete>
+
+    <delete id="deleteSysGraduateSchoolByGraduateSchoolIds" parameterType="String">
+        delete from sys_graduate_school where graduate_school_id in 
+        <foreach item="graduateSchoolId" collection="array" open="(" separator="," close=")">
+            #{graduateSchoolId}
+        </foreach>
+    </delete>
+</mapper>

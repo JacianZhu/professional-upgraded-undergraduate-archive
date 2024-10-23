@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stu.system.mapper.SysArchiveReceiverMapper">
+    
+    <resultMap type="SysArchiveReceiver" id="SysArchiveReceiverResult">
+        <result property="receiverId"    column="receiver_id"    />
+        <result property="receiverName"    column="receiver_name"    />
+        <result property="contactNumber"    column="contact_number"    />
+        <result property="postalCode"    column="postal_code"    />
+        <result property="mailingAddress"    column="mailing_address"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysArchiveReceiverVo">
+        select receiver_id, receiver_name, contact_number, postal_code, mailing_address, create_by, create_time, update_by, update_time from sys_archive_receiver
+    </sql>
+
+    <select id="selectSysArchiveReceiverList" parameterType="SysArchiveReceiver" resultMap="SysArchiveReceiverResult">
+        <include refid="selectSysArchiveReceiverVo"/>
+        <where>  
+            <if test="receiverName != null  and receiverName != ''"> and receiver_name like concat('%', #{receiverName}, '%')</if>
+            <if test="contactNumber != null  and contactNumber != ''"> and contact_number = #{contactNumber}</if>
+            <if test="postalCode != null  and postalCode != ''"> and postal_code = #{postalCode}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysArchiveReceiverByReceiverId" parameterType="Long" resultMap="SysArchiveReceiverResult">
+        <include refid="selectSysArchiveReceiverVo"/>
+        where receiver_id = #{receiverId}
+    </select>
+
+    <insert id="insertSysArchiveReceiver" parameterType="SysArchiveReceiver" useGeneratedKeys="true" keyProperty="receiverId">
+        insert into sys_archive_receiver
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="receiverName != null">receiver_name,</if>
+            <if test="contactNumber != null">contact_number,</if>
+            <if test="postalCode != null">postal_code,</if>
+            <if test="mailingAddress != null">mailing_address,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="receiverName != null">#{receiverName},</if>
+            <if test="contactNumber != null">#{contactNumber},</if>
+            <if test="postalCode != null">#{postalCode},</if>
+            <if test="mailingAddress != null">#{mailingAddress},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysArchiveReceiver" parameterType="SysArchiveReceiver">
+        update sys_archive_receiver
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="receiverName != null">receiver_name = #{receiverName},</if>
+            <if test="contactNumber != null">contact_number = #{contactNumber},</if>
+            <if test="postalCode != null">postal_code = #{postalCode},</if>
+            <if test="mailingAddress != null">mailing_address = #{mailingAddress},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where receiver_id = #{receiverId}
+    </update>
+
+    <delete id="deleteSysArchiveReceiverByReceiverId" parameterType="Long">
+        delete from sys_archive_receiver where receiver_id = #{receiverId}
+    </delete>
+
+    <delete id="deleteSysArchiveReceiverByReceiverIds" parameterType="String">
+        delete from sys_archive_receiver where receiver_id in 
+        <foreach item="receiverId" collection="array" open="(" separator="," close=")">
+            #{receiverId}
+        </foreach>
+    </delete>
+</mapper>

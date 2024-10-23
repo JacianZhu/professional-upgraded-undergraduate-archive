@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stu.system.mapper.SysSpecialtyMapper">
+    
+    <resultMap type="SysSpecialty" id="SysSpecialtyResult">
+        <result property="specialtyId"    column="specialty_id"    />
+        <result property="specialtyName"    column="specialty_name"    />
+        <result property="specialtyCode"    column="specialty_code"    />
+        <result property="departmentName"    column="department_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysSpecialtyVo">
+        select specialty_id, specialty_name, specialty_code, department_name, create_by, create_time, update_by, update_time from sys_specialty
+    </sql>
+
+    <select id="selectSysSpecialtyList" parameterType="SysSpecialty" resultMap="SysSpecialtyResult">
+        <include refid="selectSysSpecialtyVo"/>
+        <where>  
+            <if test="specialtyName != null  and specialtyName != ''"> and specialty_name like concat('%', #{specialtyName}, '%')</if>
+            <if test="specialtyCode != null  and specialtyCode != ''"> and specialty_code = #{specialtyCode}</if>
+            <if test="departmentName != null  and departmentName != ''"> and department_name like concat('%', #{departmentName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectSysSpecialtyBySpecialtyId" parameterType="Long" resultMap="SysSpecialtyResult">
+        <include refid="selectSysSpecialtyVo"/>
+        where specialty_id = #{specialtyId}
+    </select>
+
+    <insert id="insertSysSpecialty" parameterType="SysSpecialty" useGeneratedKeys="true" keyProperty="specialtyId">
+        insert into sys_specialty
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="specialtyName != null and specialtyName != ''">specialty_name,</if>
+            <if test="specialtyCode != null and specialtyCode != ''">specialty_code,</if>
+            <if test="departmentName != null and departmentName != ''">department_name,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="specialtyName != null and specialtyName != ''">#{specialtyName},</if>
+            <if test="specialtyCode != null and specialtyCode != ''">#{specialtyCode},</if>
+            <if test="departmentName != null and departmentName != ''">#{departmentName},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysSpecialty" parameterType="SysSpecialty">
+        update sys_specialty
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="specialtyName != null and specialtyName != ''">specialty_name = #{specialtyName},</if>
+            <if test="specialtyCode != null and specialtyCode != ''">specialty_code = #{specialtyCode},</if>
+            <if test="departmentName != null and departmentName != ''">department_name = #{departmentName},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where specialty_id = #{specialtyId}
+    </update>
+
+    <delete id="deleteSysSpecialtyBySpecialtyId" parameterType="Long">
+        delete from sys_specialty where specialty_id = #{specialtyId}
+    </delete>
+
+    <delete id="deleteSysSpecialtyBySpecialtyIds" parameterType="String">
+        delete from sys_specialty where specialty_id in 
+        <foreach item="specialtyId" collection="array" open="(" separator="," close=")">
+            #{specialtyId}
+        </foreach>
+    </delete>
+</mapper>
