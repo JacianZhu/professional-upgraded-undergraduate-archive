@@ -42,3 +42,15 @@ export function delClass(classId) {
     method: 'delete'
   })
 }
+export function getSpecialtyList() {
+  return request({
+    url: '/system/class/getSpecialtyList',
+    method: 'get'
+  })
+}
+export function getHeadTeacherList () {
+  return request({
+    url: '/system/class/getHeadTeacherList ',
+    method: 'get'
+  })
+}

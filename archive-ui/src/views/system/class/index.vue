@@ -24,7 +24,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['system:class:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -35,7 +36,8 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:class:edit']"
-        >修改</el-button>
+        >修改
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -46,7 +48,8 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['system:class:remove']"
-        >删除</el-button>
+        >删除
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -56,17 +59,18 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['system:class:export']"
-        >导出</el-button>
+        >导出
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="classList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="班级编号" align="center" prop="classId" />
-      <el-table-column label="班级名称" align="center" prop="className" />
-      <el-table-column label="专业" align="center" prop="specialtyId" />
-      <el-table-column label="班主任" align="center" prop="headTeacherId" />
+      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="班级编号" align="center" prop="classId"/>
+      <el-table-column label="班级名称" align="center" prop="className"/>
+      <el-table-column label="专业" align="center" prop="specialtyId"/>
+      <el-table-column label="班主任" align="center" prop="headTeacherId"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -75,18 +79,20 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:class:edit']"
-          >修改</el-button>
+          >修改
+          </el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:class:remove']"
-          >删除</el-button>
+          >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -99,7 +105,28 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="班级名称" prop="className">
-          <el-input v-model="form.className" placeholder="请输入班级名称" />
+          <el-input v-model="form.className" placeholder="请输入班级名称"/>
+        </el-form-item>
+        <el-form-item label="老师" prop="className">
+          <el-select style="width: 100%" v-model="form.headTeacherId" placeholder="请选择">
+            <el-option
+              v-for="item in teacher_list"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="专业" prop="className">
+          <el-select style="width: 100%" v-model="form.specialtyId" placeholder="请选择">
+            <el-option
+              v-for="item in profession_list"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -111,12 +138,29 @@
 </template>
 
 <script>
-import { listClass, getClass, delClass, addClass, updateClass } from "@/api/system/class";
+import {
+  listClass,
+  getClass,
+  delClass,
+  addClass,
+  updateClass,
+  getSpecialtyList,
+  getHeadTeacherList
+} from "@/api/system/class";
+import teacher from "@/views/system/teacher/index.vue";
+import item from "@/layout/components/Sidebar/Item.vue";
 
 export default {
   name: "Class",
+  computed: {
+    teacher() {
+      return teacher
+    }
+  },
   data() {
     return {
+      teacher_list: [],
+      profession_list: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -146,8 +190,7 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
-      }
+      rules: {}
     };
   },
   created() {
@@ -195,19 +238,43 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.classId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
+    },
+    // todo 有问题，细节再说
+
+    get_teacher_and_profession_list() {
+
+      getSpecialtyList().then((res) => {
+        this.profession_list = res.data.map((item) => {
+          return {
+            value: item.specialtyId,
+            label: item.specialtyName,
+          }
+        })
+        console.log(this.profession_list)
+      })
+      getHeadTeacherList().then(res => {
+        this.teacher_list = res.data.map(item => {
+          return {
+            value: item.headTeacherId,
+            label: item.headTeacherName
+          }
+        })
+      })
     },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
       this.open = true;
+      this.get_teacher_and_profession_list()
       this.title = "添加班级管理";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    async handleUpdate(row) {
       this.reset();
       const classId = row.classId || this.ids
+      await this.get_teacher_and_profession_list()
       getClass(classId).then(response => {
         this.form = response.data;
         this.open = true;
@@ -218,6 +285,8 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          console.log(this.form)
+
           if (this.form.classId != null) {
             updateClass(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -237,12 +306,13 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const classIds = row.classId || this.ids;
-      this.$modal.confirm('是否确认删除班级管理编号为"' + classIds + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除班级管理编号为"' + classIds + '"的数据项？').then(function () {
         return delClass(classIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+      }).catch(() => {
+      });
     },
     /** 导出按钮操作 */
     handleExport() {
