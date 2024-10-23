@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="SysHeadTeacher" id="SysHeadTeacherResult">
         <result property="headTeacherId"    column="head_teacher_id"    />
-        <result property="headTeacherName"    column="teacher_name"    />
+        <result property="headTeacherName"    column="head_teacher_name"    />
         <result property="departmentName"    column="department_name"    />
         <result property="contactNumber"    column="contact_number"    />
         <result property="createBy"    column="create_by"    />
@@ -16,13 +16,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSysHeadTeacherVo">
-        select head_teacher_id, teacher_name, department_name, contact_number, create_by, create_time, update_by, update_time from sys_head_teacher
+        select head_teacher_id, head_teacher_name, department_name, contact_number, create_by, create_time, update_by, update_time from sys_head_teacher
     </sql>
 
     <select id="selectSysHeadTeacherList" parameterType="SysHeadTeacher" resultMap="SysHeadTeacherResult">
         <include refid="selectSysHeadTeacherVo"/>
         <where>  
-            <if test="headTeacherName != null  and headTeacherName != ''"> and teacher_name like concat('%', #{headTeacherName}, '%')</if>
+            <if test="headTeacherName != null  and headTeacherName != ''"> and head_teacher_name like concat('%', #{headTeacherName}, '%')</if>
             <if test="departmentName != null  and departmentName != ''"> and department_name like concat('%', #{departmentName}, '%')</if>
             <if test="contactNumber != null  and contactNumber != ''"> and contact_number = #{contactNumber}</if>
         </where>
@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSysHeadTeacher" parameterType="SysHeadTeacher" useGeneratedKeys="true" keyProperty="headTeacherId">
         insert into sys_head_teacher
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="headTeacherName != null">teacher_name,</if>
+            <if test="headTeacherName != null">head_teacher_name,</if>
             <if test="departmentName != null">department_name,</if>
             <if test="contactNumber != null">contact_number,</if>
             <if test="createBy != null">create_by,</if>
@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateSysHeadTeacher" parameterType="SysHeadTeacher">
         update sys_head_teacher
         <trim prefix="SET" suffixOverrides=",">
-            <if test="headTeacherName != null">teacher_name = #{headTeacherName},</if>
+            <if test="headTeacherName != null">head_teacher_name = #{headTeacherName},</if>
             <if test="departmentName != null">department_name = #{departmentName},</if>
             <if test="contactNumber != null">contact_number = #{contactNumber},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
