@@ -66,6 +66,17 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
+          type="info"
+          plain
+          icon="el-icon-upload2"
+          size="mini"
+          @click="handleImport"
+          v-hasPermi="['system:user:import']"
+        >导入
+        </el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="warning"
           plain
           icon="el-icon-download"
@@ -103,7 +114,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -133,16 +144,36 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <import-file :upload="upload" ref="user_import" @submmit_after="submitFileForm"></import-file>
+
   </div>
 </template>
 
 <script>
 import { listReceiver, getReceiver, delReceiver, addReceiver, updateReceiver } from "@/api/system/receiver";
+import {getToken} from "@/utils/auth";
+import ImportFile from "@/views/components/ImportFile.vue";
 
 export default {
   name: "Receiver",
+  components: {ImportFile},
   data() {
     return {
+      upload: {
+        // 是否显示弹出层（用户导入）
+        open: false,
+        // 弹出层标题（用户导入）
+        title: "",
+        // 是否禁用上传
+        isUploading: false,
+        // 是否更新已经存在的用户数据
+        updateSupport: 0,
+        // 设置上传的请求头部
+        headers: {Authorization: "Bearer " + getToken()},
+        // 上传的地址
+        url: process.env.VUE_APP_BASE_API + "/system/receiver/import",
+        download_url:"system/user/importTemplate"
+      },
       // 遮罩层
       loading: true,
       // 选中数组
@@ -180,7 +211,20 @@ export default {
     this.getList();
   },
   methods: {
+    /** 导入按钮操作 */
+    handleImport() {
+      this.upload.title = "档案接收人导入";
+      this.upload.open = true;
+
+    },
+    // 提交上传文件
+    submitFileForm() {
+      this.upload.open = false
+      this.getList()
+      // this.$refs.upload.submit();
+    },
     /** 查询档案接收人管理列表 */
+
     getList() {
       this.loading = true;
       listReceiver(this.queryParams).then(response => {

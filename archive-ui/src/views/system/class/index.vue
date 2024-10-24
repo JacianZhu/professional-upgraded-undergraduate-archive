@@ -53,6 +53,19 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
+          type="info"
+          plain
+          icon="el-icon-upload2"
+          size="mini"
+          @click="handleImport"
+          v-hasPermi="['system:user:import']"
+        >导入
+        </el-button>
+      </el-col>
+
+
+      <el-col :span="1.5">
+        <el-button
           type="warning"
           plain
           icon="el-icon-download"
@@ -134,6 +147,7 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <import-file :upload="upload" ref="user_import" @submmit_after="submitFileForm"></import-file>
   </div>
 </template>
 
@@ -147,8 +161,10 @@ import {
   getSpecialtyList,
   getHeadTeacherList
 } from "@/api/system/class";
+import ImportFile from "@/views/components/ImportFile.vue";
 import teacher from "@/views/system/teacher/index.vue";
 import item from "@/layout/components/Sidebar/Item.vue";
+import {getToken} from "@/utils/auth";
 
 export default {
   name: "Class",
@@ -157,8 +173,26 @@ export default {
       return teacher
     }
   },
+  components: {
+    ImportFile
+  },
   data() {
     return {
+      upload: {
+        // 是否显示弹出层（用户导入）
+        open: false,
+        // 弹出层标题（用户导入）
+        title: "",
+        // 是否禁用上传
+        isUploading: false,
+        // 是否更新已经存在的用户数据
+        updateSupport: 0,
+        // 设置上传的请求头部
+        headers: {Authorization: "Bearer " + getToken()},
+        // 上传的地址
+        url: process.env.VUE_APP_BASE_API + "/system/class/import",
+        download_url:"system/user/importTemplate"
+      },
       teacher_list: [],
       profession_list: [],
       // 遮罩层
@@ -197,6 +231,18 @@ export default {
     this.getList();
   },
   methods: {
+    /** 导入按钮操作 */
+    handleImport() {
+
+      this.upload.title = "班级导入";
+      this.upload.open = true;
+    },
+    // 提交上传文件
+    submitFileForm() {
+      this.upload.open = false
+      this.getList()
+      // this.$refs.upload.submit();
+    },
     /** 查询班级管理列表 */
     getList() {
       this.loading = true;
@@ -244,18 +290,14 @@ export default {
     // todo 有问题，细节再说
 
     get_teacher_and_profession_list() {
-
-      getSpecialtyList().then((res) => {
-        this.profession_list = res.data.map((item) => {
+      return Promise.all([getSpecialtyList(), getHeadTeacherList()]).then(([res1, res2]) => {
+        this.profession_list = res1.data.map((item) => {
           return {
             value: item.specialtyId,
             label: item.specialtyName,
           }
         })
-        console.log(this.profession_list)
-      })
-      getHeadTeacherList().then(res => {
-        this.teacher_list = res.data.map(item => {
+        this.teacher_list = res2.data.map(item => {
           return {
             value: item.headTeacherId,
             label: item.headTeacherName
@@ -271,30 +313,43 @@ export default {
       this.title = "添加班级管理";
     },
     /** 修改按钮操作 */
-    async handleUpdate(row) {
+    handleUpdate(row) {
       this.reset();
       const classId = row.classId || this.ids
-      await this.get_teacher_and_profession_list()
-      getClass(classId).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改班级管理";
-      });
+      this.get_teacher_and_profession_list().then(res => {
+        getClass(classId).then(response => {
+          this.form = response.data;
+          this.open = true;
+          this.title = "修改班级管理";
+        });
+      })
+
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          console.log(this.form)
-
+          let dat = JSON.parse(JSON.stringify(this.form))
+          this.profession_list.map((item) => {
+            console.log(item)
+            if (item.value === dat.specialtyId) {
+              dat.specialtyName = item.label
+            }
+          })
+          this.teacher_list.map((item) => {
+            if (item.value === dat.headTeacherId) {
+              dat.headTeacherName = item.label
+            }
+          })
           if (this.form.classId != null) {
-            updateClass(this.form).then(response => {
+            updateClass(dat).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addClass(this.form).then(response => {
+
+            addClass(dat).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
