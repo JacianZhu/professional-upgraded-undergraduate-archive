@@ -16,21 +16,43 @@ public class SysClass extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 班级编号 */
+    @Excel(name = "班级编号")
     private Long classId;
 
     /** 班级名称 */
     @Excel(name = "班级名称")
     private String className;
 
+    private Long specialtyId;
+
+    private Long headTeacherId;
+
     /** 专业 */
     @Excel(name = "专业")
-    private Long specialtyId;
+    private String specialtyName;
 
     /** 班主任 */
     @Excel(name = "班主任")
-    private Long headTeacherId;
+    private String headTeacherName;
 
-    public void setClassId(Long classId) 
+
+    public String getSpecialtyName() {
+        return specialtyName;
+    }
+
+    public void setSpecialtyName(String specialtyName) {
+        this.specialtyName = specialtyName;
+    }
+
+    public String getHeadTeacherName() {
+        return headTeacherName;
+    }
+
+    public void setHeadTeacherName(String headTeacherName) {
+        this.headTeacherName = headTeacherName;
+    }
+
+    public void setClassId(Long classId)
     {
         this.classId = classId;
     }

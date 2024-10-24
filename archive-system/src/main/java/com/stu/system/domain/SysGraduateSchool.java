@@ -16,6 +16,7 @@ public class SysGraduateSchool extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 毕业院校编号 */
+    @Excel(name = "毕业院校编号")
     private Long graduateSchoolId;
 
     /** 毕业院校名称 */

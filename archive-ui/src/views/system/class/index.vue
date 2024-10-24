@@ -69,8 +69,8 @@
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="班级编号" align="center" prop="classId"/>
       <el-table-column label="班级名称" align="center" prop="className"/>
-      <el-table-column label="专业" align="center" prop="specialtyId"/>
-      <el-table-column label="班主任" align="center" prop="headTeacherId"/>
+      <el-table-column label="专业" align="center" prop="specialtyName"/>
+      <el-table-column label="班主任" align="center" prop="headTeacherName"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

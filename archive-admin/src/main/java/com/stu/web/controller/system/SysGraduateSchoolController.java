@@ -2,6 +2,8 @@ package com.stu.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.stu.system.domain.SysAdmissionInfo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +22,17 @@ import com.stu.system.domain.SysGraduateSchool;
 import com.stu.system.service.ISysGraduateSchoolService;
 import com.stu.common.utils.poi.ExcelUtil;
 import com.stu.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 毕业院校管理Controller
- * 
+ *
  * @author stu
  * @date 2024-10-23
  */
 @RestController
 @RequestMapping("/system/school")
-public class SysGraduateSchoolController extends BaseController
-{
+public class SysGraduateSchoolController extends BaseController {
     @Autowired
     private ISysGraduateSchoolService sysGraduateSchoolService;
 
@@ -39,8 +41,7 @@ public class SysGraduateSchoolController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:school:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysGraduateSchool sysGraduateSchool)
-    {
+    public TableDataInfo list(SysGraduateSchool sysGraduateSchool) {
         startPage();
         List<SysGraduateSchool> list = sysGraduateSchoolService.selectSysGraduateSchoolList(sysGraduateSchool);
         return getDataTable(list);
@@ -52,20 +53,31 @@ public class SysGraduateSchoolController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:school:export')")
     @Log(title = "毕业院校管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysGraduateSchool sysGraduateSchool)
-    {
+    public void export(HttpServletResponse response, SysGraduateSchool sysGraduateSchool) {
         List<SysGraduateSchool> list = sysGraduateSchoolService.selectSysGraduateSchoolList(sysGraduateSchool);
         ExcelUtil<SysGraduateSchool> util = new ExcelUtil<SysGraduateSchool>(SysGraduateSchool.class);
         util.exportExcel(response, list, "毕业院校管理数据");
     }
+
+
+    @Log(title = "毕业院校信息导入", businessType = BusinessType.IMPORT)
+    // @PreAuthorize("@ss.hasPermi('system:admissionInfo:import')")
+    @PostMapping("/import")
+    public AjaxResult importData(MultipartFile file) throws Exception {
+        ExcelUtil<SysGraduateSchool> util = new ExcelUtil<>(SysGraduateSchool.class);
+        List<SysGraduateSchool> sysAdmissionInfoList = util.importExcel(file.getInputStream());
+        String operatorName = getUsername();
+        String message = sysGraduateSchoolService.importSysGraduateSchoolInfo(sysAdmissionInfoList, operatorName);
+        return success(message);
+    }
+
 
     /**
      * 获取毕业院校管理详细信息
      */
     @PreAuthorize("@ss.hasPermi('system:school:query')")
     @GetMapping(value = "/{graduateSchoolId}")
-    public AjaxResult getInfo(@PathVariable("graduateSchoolId") Long graduateSchoolId)
-    {
+    public AjaxResult getInfo(@PathVariable("graduateSchoolId") Long graduateSchoolId) {
         return success(sysGraduateSchoolService.selectSysGraduateSchoolByGraduateSchoolId(graduateSchoolId));
     }
 
@@ -75,8 +87,7 @@ public class SysGraduateSchoolController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:school:add')")
     @Log(title = "毕业院校管理", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody SysGraduateSchool sysGraduateSchool)
-    {
+    public AjaxResult add(@RequestBody SysGraduateSchool sysGraduateSchool) {
         return toAjax(sysGraduateSchoolService.insertSysGraduateSchool(sysGraduateSchool));
     }
 
@@ -86,8 +97,7 @@ public class SysGraduateSchoolController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:school:edit')")
     @Log(title = "毕业院校管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody SysGraduateSchool sysGraduateSchool)
-    {
+    public AjaxResult edit(@RequestBody SysGraduateSchool sysGraduateSchool) {
         return toAjax(sysGraduateSchoolService.updateSysGraduateSchool(sysGraduateSchool));
     }
 
@@ -96,9 +106,8 @@ public class SysGraduateSchoolController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:school:remove')")
     @Log(title = "毕业院校管理", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{graduateSchoolIds}")
-    public AjaxResult remove(@PathVariable Long[] graduateSchoolIds)
-    {
+    @DeleteMapping("/{graduateSchoolIds}")
+    public AjaxResult remove(@PathVariable Long[] graduateSchoolIds) {
         return toAjax(sysGraduateSchoolService.deleteSysGraduateSchoolByGraduateSchoolIds(graduateSchoolIds));
     }
 }

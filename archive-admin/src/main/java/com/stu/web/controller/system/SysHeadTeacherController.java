@@ -2,6 +2,8 @@ package com.stu.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.stu.system.domain.SysAdmissionInfo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import com.stu.system.domain.SysHeadTeacher;
 import com.stu.system.service.ISysHeadTeacherService;
 import com.stu.common.utils.poi.ExcelUtil;
 import com.stu.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 班主任管理Controller
@@ -57,6 +60,18 @@ public class SysHeadTeacherController extends BaseController
         List<SysHeadTeacher> list = sysHeadTeacherService.selectSysHeadTeacherList(sysHeadTeacher);
         ExcelUtil<SysHeadTeacher> util = new ExcelUtil<SysHeadTeacher>(SysHeadTeacher.class);
         util.exportExcel(response, list, "班主任管理数据");
+    }
+
+
+    @Log(title = "班主任导入", businessType = BusinessType.IMPORT)
+    // @PreAuthorize("@ss.hasPermi('system:admissionInfo:import')")
+    @PostMapping("/import")
+    public AjaxResult importData(MultipartFile file) throws Exception {
+        ExcelUtil<SysHeadTeacher> util = new ExcelUtil<>(SysHeadTeacher.class);
+        List<SysHeadTeacher> sysAdmissionInfoList = util.importExcel(file.getInputStream());
+        String operatorName = getUsername();
+        String message = sysHeadTeacherService.importSysHeadTeacherInfo(sysAdmissionInfoList, operatorName);
+        return success(message);
     }
 
     /**

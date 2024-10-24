@@ -16,6 +16,7 @@ public class SysCourierCompany extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 快递公司编号 */
+    @Excel(name = "快递公司编号")
     private Long courierCompanyId;
 
     /** 快递公司名称 */

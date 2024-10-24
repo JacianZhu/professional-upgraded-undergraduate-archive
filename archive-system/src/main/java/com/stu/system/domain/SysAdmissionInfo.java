@@ -19,6 +19,7 @@ public class SysAdmissionInfo extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 录取编号 */
+    @Excel(name = "录取编号")
     private Long admissionId;
 
     /** 学生姓名 */

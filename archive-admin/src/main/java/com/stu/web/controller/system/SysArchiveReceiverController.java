@@ -2,6 +2,8 @@ package com.stu.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.stu.system.domain.SysAdmissionInfo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +22,17 @@ import com.stu.system.domain.SysArchiveReceiver;
 import com.stu.system.service.ISysArchiveReceiverService;
 import com.stu.common.utils.poi.ExcelUtil;
 import com.stu.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 档案接收人管理Controller
- * 
+ *
  * @author stu
  * @date 2024-10-23
  */
 @RestController
 @RequestMapping("/system/receiver")
-public class SysArchiveReceiverController extends BaseController
-{
+public class SysArchiveReceiverController extends BaseController {
     @Autowired
     private ISysArchiveReceiverService sysArchiveReceiverService;
 
@@ -39,8 +41,7 @@ public class SysArchiveReceiverController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:receiver:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysArchiveReceiver sysArchiveReceiver)
-    {
+    public TableDataInfo list(SysArchiveReceiver sysArchiveReceiver) {
         startPage();
         List<SysArchiveReceiver> list = sysArchiveReceiverService.selectSysArchiveReceiverList(sysArchiveReceiver);
         return getDataTable(list);
@@ -52,20 +53,30 @@ public class SysArchiveReceiverController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:receiver:export')")
     @Log(title = "档案接收人管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysArchiveReceiver sysArchiveReceiver)
-    {
+    public void export(HttpServletResponse response, SysArchiveReceiver sysArchiveReceiver) {
         List<SysArchiveReceiver> list = sysArchiveReceiverService.selectSysArchiveReceiverList(sysArchiveReceiver);
         ExcelUtil<SysArchiveReceiver> util = new ExcelUtil<SysArchiveReceiver>(SysArchiveReceiver.class);
         util.exportExcel(response, list, "档案接收人管理数据");
     }
+
+    @Log(title = "档案接收人管理导入", businessType = BusinessType.IMPORT)
+    // @PreAuthorize("@ss.hasPermi('system:admissionInfo:import')")
+    @PostMapping("/import")
+    public AjaxResult importData(MultipartFile file) throws Exception {
+        ExcelUtil<SysArchiveReceiver> util = new ExcelUtil<>(SysArchiveReceiver.class);
+        List<SysArchiveReceiver> sysArchiveReceiverList = util.importExcel(file.getInputStream());
+        String operatorName = getUsername();
+        String message = sysArchiveReceiverService.importArchiveReceiverInfo(sysArchiveReceiverList, operatorName);
+        return success(message);
+    }
+
 
     /**
      * 获取档案接收人管理详细信息
      */
     @PreAuthorize("@ss.hasPermi('system:receiver:query')")
     @GetMapping(value = "/{receiverId}")
-    public AjaxResult getInfo(@PathVariable("receiverId") Long receiverId)
-    {
+    public AjaxResult getInfo(@PathVariable("receiverId") Long receiverId) {
         return success(sysArchiveReceiverService.selectSysArchiveReceiverByReceiverId(receiverId));
     }
 
@@ -75,8 +86,7 @@ public class SysArchiveReceiverController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:receiver:add')")
     @Log(title = "档案接收人管理", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody SysArchiveReceiver sysArchiveReceiver)
-    {
+    public AjaxResult add(@RequestBody SysArchiveReceiver sysArchiveReceiver) {
         return toAjax(sysArchiveReceiverService.insertSysArchiveReceiver(sysArchiveReceiver));
     }
 
@@ -86,8 +96,7 @@ public class SysArchiveReceiverController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:receiver:edit')")
     @Log(title = "档案接收人管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody SysArchiveReceiver sysArchiveReceiver)
-    {
+    public AjaxResult edit(@RequestBody SysArchiveReceiver sysArchiveReceiver) {
         return toAjax(sysArchiveReceiverService.updateSysArchiveReceiver(sysArchiveReceiver));
     }
 
@@ -96,9 +105,9 @@ public class SysArchiveReceiverController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:receiver:remove')")
     @Log(title = "档案接收人管理", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{receiverIds}")
-    public AjaxResult remove(@PathVariable Long[] receiverIds)
-    {
+    @DeleteMapping("/{receiverIds}")
+    public AjaxResult remove(@PathVariable Long[] receiverIds) {
         return toAjax(sysArchiveReceiverService.deleteSysArchiveReceiverByReceiverIds(receiverIds));
     }
+
 }

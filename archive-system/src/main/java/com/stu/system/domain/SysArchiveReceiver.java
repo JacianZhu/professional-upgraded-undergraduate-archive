@@ -16,6 +16,7 @@ public class SysArchiveReceiver extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 接收人编号 */
+    @Excel(name = "接收人编号")
     private Long receiverId;
 
     /** 接收人姓名 */

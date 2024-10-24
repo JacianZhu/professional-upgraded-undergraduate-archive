@@ -2,6 +2,8 @@ package com.stu.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.stu.common.core.domain.entity.SysUser;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +22,17 @@ import com.stu.system.domain.SysAdmissionInfo;
 import com.stu.system.service.ISysAdmissionInfoService;
 import com.stu.common.utils.poi.ExcelUtil;
 import com.stu.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 录取信息导入Controller
- * 
+ *
  * @author stu
  * @date 2024-10-23
  */
 @RestController
 @RequestMapping("/system/admissionInfo")
-public class SysAdmissionInfoController extends BaseController
-{
+public class SysAdmissionInfoController extends BaseController {
     @Autowired
     private ISysAdmissionInfoService sysAdmissionInfoService;
 
@@ -39,8 +41,7 @@ public class SysAdmissionInfoController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:admissionInfo:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysAdmissionInfo sysAdmissionInfo)
-    {
+    public TableDataInfo list(SysAdmissionInfo sysAdmissionInfo) {
         startPage();
         List<SysAdmissionInfo> list = sysAdmissionInfoService.selectSysAdmissionInfoList(sysAdmissionInfo);
         return getDataTable(list);
@@ -50,13 +51,24 @@ public class SysAdmissionInfoController extends BaseController
      * 导出录取信息导入列表
      */
     @PreAuthorize("@ss.hasPermi('system:admissionInfo:export')")
-    @Log(title = "录取信息导入", businessType = BusinessType.EXPORT)
+    @Log(title = "录取信息导出", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysAdmissionInfo sysAdmissionInfo)
-    {
+    public void export(HttpServletResponse response, SysAdmissionInfo sysAdmissionInfo) {
         List<SysAdmissionInfo> list = sysAdmissionInfoService.selectSysAdmissionInfoList(sysAdmissionInfo);
         ExcelUtil<SysAdmissionInfo> util = new ExcelUtil<SysAdmissionInfo>(SysAdmissionInfo.class);
         util.exportExcel(response, list, "录取信息导入数据");
+    }
+
+
+    @Log(title = "录取信息导入", businessType = BusinessType.IMPORT)
+   // @PreAuthorize("@ss.hasPermi('system:admissionInfo:import')")
+    @PostMapping("/import")
+    public AjaxResult importData(MultipartFile file) throws Exception {
+        ExcelUtil<SysAdmissionInfo> util = new ExcelUtil<>(SysAdmissionInfo.class);
+        List<SysAdmissionInfo> sysAdmissionInfoList = util.importExcel(file.getInputStream());
+        String operatorName = getUsername();
+        String message = sysAdmissionInfoService.importAdmissionInfo(sysAdmissionInfoList, operatorName);
+        return success(message);
     }
 
     /**
@@ -64,8 +76,7 @@ public class SysAdmissionInfoController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:admissionInfo:query')")
     @GetMapping(value = "/{admissionId}")
-    public AjaxResult getInfo(@PathVariable("admissionId") Long admissionId)
-    {
+    public AjaxResult getInfo(@PathVariable("admissionId") Long admissionId) {
         return success(sysAdmissionInfoService.selectSysAdmissionInfoByAdmissionId(admissionId));
     }
 
@@ -75,8 +86,7 @@ public class SysAdmissionInfoController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:admissionInfo:add')")
     @Log(title = "录取信息导入", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody SysAdmissionInfo sysAdmissionInfo)
-    {
+    public AjaxResult add(@RequestBody SysAdmissionInfo sysAdmissionInfo) {
         return toAjax(sysAdmissionInfoService.insertSysAdmissionInfo(sysAdmissionInfo));
     }
 
@@ -86,8 +96,7 @@ public class SysAdmissionInfoController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:admissionInfo:edit')")
     @Log(title = "录取信息导入", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody SysAdmissionInfo sysAdmissionInfo)
-    {
+    public AjaxResult edit(@RequestBody SysAdmissionInfo sysAdmissionInfo) {
         return toAjax(sysAdmissionInfoService.updateSysAdmissionInfo(sysAdmissionInfo));
     }
 
@@ -96,9 +105,8 @@ public class SysAdmissionInfoController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:admissionInfo:remove')")
     @Log(title = "录取信息导入", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{admissionIds}")
-    public AjaxResult remove(@PathVariable Long[] admissionIds)
-    {
+    @DeleteMapping("/{admissionIds}")
+    public AjaxResult remove(@PathVariable Long[] admissionIds) {
         return toAjax(sysAdmissionInfoService.deleteSysAdmissionInfoByAdmissionIds(admissionIds));
     }
 }

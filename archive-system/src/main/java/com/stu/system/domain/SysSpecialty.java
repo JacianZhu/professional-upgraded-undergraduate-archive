@@ -16,6 +16,7 @@ public class SysSpecialty extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 专业编号 */
+    @Excel(name = "专业编号")
     private Long specialtyId;
 
     /** 专业名称 */

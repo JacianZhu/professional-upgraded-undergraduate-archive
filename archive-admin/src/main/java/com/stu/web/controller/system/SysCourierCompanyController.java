@@ -2,6 +2,8 @@ package com.stu.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.stu.system.domain.SysAdmissionInfo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import com.stu.system.domain.SysCourierCompany;
 import com.stu.system.service.ISysCourierCompanyService;
 import com.stu.common.utils.poi.ExcelUtil;
 import com.stu.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 快递公司管理Controller
@@ -58,6 +61,18 @@ public class SysCourierCompanyController extends BaseController
         ExcelUtil<SysCourierCompany> util = new ExcelUtil<SysCourierCompany>(SysCourierCompany.class);
         util.exportExcel(response, list, "快递公司管理数据");
     }
+
+    @Log(title = "快递公司信息导入", businessType = BusinessType.IMPORT)
+    // @PreAuthorize("@ss.hasPermi('system:admissionInfo:import')")
+    @PostMapping("/import")
+    public AjaxResult importData(MultipartFile file) throws Exception {
+        ExcelUtil<SysCourierCompany> util = new ExcelUtil<>(SysCourierCompany.class);
+        List<SysCourierCompany> sysCourierCompanyList = util.importExcel(file.getInputStream());
+        String operatorName = getUsername();
+        String message = sysCourierCompanyService.importSysCourierCompany(sysCourierCompanyList, operatorName);
+        return success(message);
+    }
+
 
     /**
      * 获取快递公司管理详细信息

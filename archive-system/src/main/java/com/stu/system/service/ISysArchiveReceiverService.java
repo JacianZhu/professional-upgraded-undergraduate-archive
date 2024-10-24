@@ -1,6 +1,8 @@
 package com.stu.system.service;
 
 import java.util.List;
+
+import com.stu.system.domain.SysAdmissionInfo;
 import com.stu.system.domain.SysArchiveReceiver;
 
 /**
@@ -58,4 +60,17 @@ public interface ISysArchiveReceiverService
      * @return 结果
      */
     public int deleteSysArchiveReceiverByReceiverId(Long receiverId);
+
+
+
+    /**
+     * 导入用户数据
+     *
+     * @param sysAdmissionInfoList 用户数据列表
+     * @param operatorName 操作用户
+     * @return 结果
+     */
+    public String importArchiveReceiverInfo(List<SysArchiveReceiver> sysAdmissionInfoList, String operatorName);
+
+
 }

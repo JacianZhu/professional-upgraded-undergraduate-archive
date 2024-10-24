@@ -16,6 +16,7 @@ public class SysHeadTeacher extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 班主任编号 */
+    @Excel(name = "班主任编号")
     private Long headTeacherId;
 
     /** 班主任姓名 */

@@ -1,6 +1,8 @@
 package com.stu.system.service;
 
 import java.util.List;
+
+import com.stu.system.domain.SysAdmissionInfo;
 import com.stu.system.domain.SysGraduateSchool;
 
 /**
@@ -58,4 +60,14 @@ public interface ISysGraduateSchoolService
      * @return 结果
      */
     public int deleteSysGraduateSchoolByGraduateSchoolId(Long graduateSchoolId);
+
+
+    /**
+     * 导入用户数据
+     *
+     * @param sysGraduateSchoolList 用户数据列表
+     * @param operatorName 操作用户
+     * @return 结果
+     */
+    public String importSysGraduateSchoolInfo(List<SysGraduateSchool> sysGraduateSchoolList, String operatorName);
 }

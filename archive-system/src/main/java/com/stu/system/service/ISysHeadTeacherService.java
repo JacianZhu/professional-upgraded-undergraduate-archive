@@ -1,6 +1,8 @@
 package com.stu.system.service;
 
 import java.util.List;
+
+import com.stu.system.domain.SysAdmissionInfo;
 import com.stu.system.domain.SysHeadTeacher;
 
 /**
@@ -58,4 +60,13 @@ public interface ISysHeadTeacherService
      * @return 结果
      */
     public int deleteSysHeadTeacherByHeadTeacherId(Long headTeacherId);
+
+    /**
+     * 导入用户数据
+     *
+     * @param sysHeadTeacherList 用户数据列表
+     * @param operatorName 操作用户
+     * @return 结果
+     */
+    public String importSysHeadTeacherInfo(List<SysHeadTeacher> sysHeadTeacherList, String operatorName);
 }
