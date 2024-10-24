@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stu.system.mapper.SysArchiveMapper">
+    
+    <resultMap type="SysArchive" id="SysArchiveResult">
+        <result property="archiveId"    column="archive_id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="studentGender"    column="student_gender"    />
+        <result property="studentDateOfBirth"    column="student_date_of_birth"    />
+        <result property="studentNationalId"    column="student_national_id"    />
+        <result property="graduationSchool"    column="graduation_school"    />
+        <result property="graduationMajor"    column="graduation_major"    />
+        <result property="receiveMethod"    column="receive_method"    />
+        <result property="trackingNumber"    column="tracking_number"    />
+        <result property="receiveDate"    column="receive_date"    />
+        <result property="sender"    column="sender"    />
+        <result property="handedToTeacher"    column="handed_to_teacher"    />
+        <result property="opened"    column="opened"    />
+        <result property="transferMethod"    column="transfer_method"    />
+        <result property="transferDate"    column="transfer_date"    />
+        <result property="transferPerson"    column="transfer_person"    />
+        <result property="recipient"    column="recipient"    />
+        <result property="contactPhone"    column="contact_phone"    />
+        <result property="mailingAddress"    column="mailing_address"    />
+        <result property="archiveComplete"    column="archive_complete"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="archiveStatus"    column="archive_status"    />
+    </resultMap>
+
+    <sql id="selectSysArchiveVo">
+        select archive_id, student_name, student_gender, student_date_of_birth, student_national_id, graduation_school, graduation_major, receive_method, tracking_number, receive_date, sender, handed_to_teacher, opened, transfer_method, transfer_date, transfer_person, recipient, contact_phone, mailing_address, archive_complete, remarks, create_by, create_time, update_by, archive_status from sys_archive
+    </sql>
+
+    <select id="selectSysArchiveList" parameterType="SysArchive" resultMap="SysArchiveResult">
+        <include refid="selectSysArchiveVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectSysArchiveByArchiveId" parameterType="Long" resultMap="SysArchiveResult">
+        <include refid="selectSysArchiveVo"/>
+        where archive_id = #{archiveId}
+    </select>
+
+    <insert id="insertSysArchive" parameterType="SysArchive" useGeneratedKeys="true" keyProperty="archiveId">
+        insert into sys_archive
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">student_name,</if>
+            <if test="studentGender != null">student_gender,</if>
+            <if test="studentDateOfBirth != null">student_date_of_birth,</if>
+            <if test="studentNationalId != null">student_national_id,</if>
+            <if test="graduationSchool != null">graduation_school,</if>
+            <if test="graduationMajor != null">graduation_major,</if>
+            <if test="receiveMethod != null">receive_method,</if>
+            <if test="trackingNumber != null">tracking_number,</if>
+            <if test="receiveDate != null">receive_date,</if>
+            <if test="sender != null">sender,</if>
+            <if test="handedToTeacher != null">handed_to_teacher,</if>
+            <if test="opened != null">opened,</if>
+            <if test="transferMethod != null">transfer_method,</if>
+            <if test="transferDate != null">transfer_date,</if>
+            <if test="transferPerson != null">transfer_person,</if>
+            <if test="recipient != null">recipient,</if>
+            <if test="contactPhone != null">contact_phone,</if>
+            <if test="mailingAddress != null">mailing_address,</if>
+            <if test="archiveComplete != null">archive_complete,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="archiveStatus != null">archive_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="studentGender != null">#{studentGender},</if>
+            <if test="studentDateOfBirth != null">#{studentDateOfBirth},</if>
+            <if test="studentNationalId != null">#{studentNationalId},</if>
+            <if test="graduationSchool != null">#{graduationSchool},</if>
+            <if test="graduationMajor != null">#{graduationMajor},</if>
+            <if test="receiveMethod != null">#{receiveMethod},</if>
+            <if test="trackingNumber != null">#{trackingNumber},</if>
+            <if test="receiveDate != null">#{receiveDate},</if>
+            <if test="sender != null">#{sender},</if>
+            <if test="handedToTeacher != null">#{handedToTeacher},</if>
+            <if test="opened != null">#{opened},</if>
+            <if test="transferMethod != null">#{transferMethod},</if>
+            <if test="transferDate != null">#{transferDate},</if>
+            <if test="transferPerson != null">#{transferPerson},</if>
+            <if test="recipient != null">#{recipient},</if>
+            <if test="contactPhone != null">#{contactPhone},</if>
+            <if test="mailingAddress != null">#{mailingAddress},</if>
+            <if test="archiveComplete != null">#{archiveComplete},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="archiveStatus != null">#{archiveStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysArchive" parameterType="SysArchive">
+        update sys_archive
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="studentGender != null">student_gender = #{studentGender},</if>
+            <if test="studentDateOfBirth != null">student_date_of_birth = #{studentDateOfBirth},</if>
+            <if test="studentNationalId != null">student_national_id = #{studentNationalId},</if>
+            <if test="graduationSchool != null">graduation_school = #{graduationSchool},</if>
+            <if test="graduationMajor != null">graduation_major = #{graduationMajor},</if>
+            <if test="receiveMethod != null">receive_method = #{receiveMethod},</if>
+            <if test="trackingNumber != null">tracking_number = #{trackingNumber},</if>
+            <if test="receiveDate != null">receive_date = #{receiveDate},</if>
+            <if test="sender != null">sender = #{sender},</if>
+            <if test="handedToTeacher != null">handed_to_teacher = #{handedToTeacher},</if>
+            <if test="opened != null">opened = #{opened},</if>
+            <if test="transferMethod != null">transfer_method = #{transferMethod},</if>
+            <if test="transferDate != null">transfer_date = #{transferDate},</if>
+            <if test="transferPerson != null">transfer_person = #{transferPerson},</if>
+            <if test="recipient != null">recipient = #{recipient},</if>
+            <if test="contactPhone != null">contact_phone = #{contactPhone},</if>
+            <if test="mailingAddress != null">mailing_address = #{mailingAddress},</if>
+            <if test="archiveComplete != null">archive_complete = #{archiveComplete},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="archiveStatus != null">archive_status = #{archiveStatus},</if>
+        </trim>
+        where archive_id = #{archiveId}
+    </update>
+
+    <delete id="deleteSysArchiveByArchiveId" parameterType="Long">
+        delete from sys_archive where archive_id = #{archiveId}
+    </delete>
+
+    <delete id="deleteSysArchiveByArchiveIds" parameterType="String">
+        delete from sys_archive where archive_id in 
+        <foreach item="archiveId" collection="array" open="(" separator="," close=")">
+            #{archiveId}
+        </foreach>
+    </delete>
+</mapper>
