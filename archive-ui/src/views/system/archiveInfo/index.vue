@@ -57,7 +57,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="档案编号" align="center" prop="archiveId" />
       <el-table-column label="学生姓名" align="center" prop="studentName" />
-      <el-table-column label="学生性别" align="center" prop="studentGender" />
+      <el-table-column label="学生性别" align="center" prop="studentGender">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.studentGender"/>
+        </template>
+      </el-table-column>
       <el-table-column label="学生出生日期" align="center" prop="studentDateOfBirth" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.studentDateOfBirth, '{y}-{m}-{d}') }}</span>
@@ -66,7 +70,11 @@
       <el-table-column label="学生身份证号" align="center" prop="studentNationalId" />
       <el-table-column label="毕业院校" align="center" prop="graduationSchool" />
       <el-table-column label="毕业专业" align="center" prop="graduationMajor" />
-      <el-table-column label="接收方式" align="center" prop="receiveMethod" />
+      <el-table-column label="接收方式" align="center" prop="receiveMethod">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_receive_type" :value="scope.row.receiveMethod"/>
+        </template>
+      </el-table-column>
       <el-table-column label="邮寄单号" align="center" prop="trackingNumber" />
       <el-table-column label="接收日期" align="center" prop="receiveDate" width="180">
         <template slot-scope="scope">
@@ -74,9 +82,21 @@
         </template>
       </el-table-column>
       <el-table-column label="邮寄人" align="center" prop="sender" />
-      <el-table-column label="是否移交班主任" align="center" prop="handedToTeacher" />
-      <el-table-column label="是否拆封" align="center" prop="opened" />
-      <el-table-column label="移交方式" align="center" prop="transferMethod" />
+      <el-table-column label="是否移交班主任" align="center" prop="handedToTeacher">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.handedToTeacher"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否拆封" align="center" prop="opened">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.opened"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="移交方式" align="center" prop="transferMethod">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_transfer_type" :value="scope.row.transferMethod"/>
+        </template>
+      </el-table-column>
       <el-table-column label="移交日期" align="center" prop="transferDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.transferDate, '{y}-{m}-{d}') }}</span>
@@ -86,9 +106,17 @@
       <el-table-column label="档案接收人" align="center" prop="recipient" />
       <el-table-column label="联系电话" align="center" prop="contactPhone" />
       <el-table-column label="邮寄地址" align="center" prop="mailingAddress" />
-      <el-table-column label="档案是否完整" align="center" prop="archiveComplete" />
+      <el-table-column label="档案是否完整" align="center" prop="archiveComplete">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.archiveComplete"/>
+        </template>
+      </el-table-column>
       <el-table-column label="备注" align="center" prop="remarks" />
-      <el-table-column label="档案状态" align="center" prop="archiveStatus" />
+      <el-table-column label="档案状态" align="center" prop="archiveStatus">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_archive_status" :value="scope.row.archiveStatus"/>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -123,6 +151,16 @@
         <el-form-item label="学生姓名" prop="studentName">
           <el-input v-model="form.studentName" placeholder="请输入学生姓名" />
         </el-form-item>
+        <el-form-item label="学生性别" prop="studentGender">
+          <el-select v-model="form.studentGender" placeholder="请选择学生性别">
+            <el-option
+              v-for="dict in dict.type.sys_user_sex"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="学生出生日期" prop="studentDateOfBirth">
           <el-date-picker clearable
             v-model="form.studentDateOfBirth"
@@ -141,7 +179,14 @@
           <el-input v-model="form.graduationMajor" placeholder="请输入毕业专业" />
         </el-form-item>
         <el-form-item label="接收方式" prop="receiveMethod">
-          <el-input v-model="form.receiveMethod" placeholder="请输入接收方式" />
+          <el-select v-model="form.receiveMethod" placeholder="请选择接收方式">
+            <el-option
+              v-for="dict in dict.type.sys_receive_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="邮寄单号" prop="trackingNumber">
           <el-input v-model="form.trackingNumber" placeholder="请输入邮寄单号" />
@@ -158,10 +203,34 @@
           <el-input v-model="form.sender" placeholder="请输入邮寄人" />
         </el-form-item>
         <el-form-item label="是否移交班主任" prop="handedToTeacher">
-          <el-input v-model="form.handedToTeacher" placeholder="请输入是否移交班主任" />
+          <el-select v-model="form.handedToTeacher" placeholder="请选择是否移交班主任">
+            <el-option
+              v-for="dict in dict.type.sys_yes_no"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="是否拆封" prop="opened">
-          <el-input v-model="form.opened" placeholder="请输入是否拆封" />
+          <el-select v-model="form.opened" placeholder="请选择是否拆封">
+            <el-option
+              v-for="dict in dict.type.sys_yes_no"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="移交方式" prop="transferMethod">
+          <el-select v-model="form.transferMethod" placeholder="请选择移交方式">
+            <el-option
+              v-for="dict in dict.type.sys_transfer_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="移交日期" prop="transferDate">
           <el-date-picker clearable
@@ -184,10 +253,27 @@
           <el-input v-model="form.mailingAddress" placeholder="请输入邮寄地址" />
         </el-form-item>
         <el-form-item label="档案是否完整" prop="archiveComplete">
-          <el-input v-model="form.archiveComplete" placeholder="请输入档案是否完整" />
+          <el-select v-model="form.archiveComplete" placeholder="请选择档案是否完整">
+            <el-option
+              v-for="dict in dict.type.sys_yes_no"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remarks">
           <el-input v-model="form.remarks" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item label="档案状态" prop="archiveStatus">
+          <el-select v-model="form.archiveStatus" placeholder="请选择档案状态">
+            <el-option
+              v-for="dict in dict.type.sys_archive_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -203,6 +289,7 @@ import { listArchiveInfo, getArchiveInfo, delArchiveInfo, addArchiveInfo, update
 
 export default {
   name: "ArchiveInfo",
+  dicts: ['sys_receive_type', 'sys_yes_no', 'sys_archive_status', 'sys_user_sex', 'sys_transfer_type'],
   data() {
     return {
       // 遮罩层

@@ -11,7 +11,7 @@ import com.stu.common.core.domain.BaseEntity;
  * 档案信息对象 sys_archive
  * 
  * @author stu
- * @date 2024-10-24
+ * @date 2024-11-03
  */
 public class SysArchive extends BaseEntity
 {
@@ -65,11 +65,11 @@ public class SysArchive extends BaseEntity
 
     /** 是否移交班主任（仅自带方式有效） */
     @Excel(name = "是否移交班主任", readConverterExp = "仅=自带方式有效")
-    private Integer handedToTeacher;
+    private String handedToTeacher;
 
     /** 是否拆封（仅自带方式有效） */
     @Excel(name = "是否拆封", readConverterExp = "仅=自带方式有效")
-    private Integer opened;
+    private String opened;
 
     /** 移交方式（自提或邮寄） */
     @Excel(name = "移交方式", readConverterExp = "自=提或邮寄")
@@ -207,21 +207,21 @@ public class SysArchive extends BaseEntity
     {
         return sender;
     }
-    public void setHandedToTeacher(Integer handedToTeacher) 
+    public void setHandedToTeacher(String handedToTeacher) 
     {
         this.handedToTeacher = handedToTeacher;
     }
 
-    public Integer getHandedToTeacher() 
+    public String getHandedToTeacher() 
     {
         return handedToTeacher;
     }
-    public void setOpened(Integer opened) 
+    public void setOpened(String opened) 
     {
         this.opened = opened;
     }
 
-    public Integer getOpened() 
+    public String getOpened() 
     {
         return opened;
     }

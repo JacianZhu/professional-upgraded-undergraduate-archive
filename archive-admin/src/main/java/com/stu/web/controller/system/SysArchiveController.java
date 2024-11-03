@@ -25,7 +25,7 @@ import com.stu.common.core.page.TableDataInfo;
  * 档案信息Controller
  * 
  * @author stu
- * @date 2024-10-24
+ * @date 2024-11-03
  */
 @RestController
 @RequestMapping("/system/archiveInfo")
