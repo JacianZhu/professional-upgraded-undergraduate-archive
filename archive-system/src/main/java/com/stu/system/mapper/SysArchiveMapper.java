@@ -7,7 +7,7 @@ import com.stu.system.domain.SysArchive;
  * 档案信息Mapper接口
  * 
  * @author stu
- * @date 2024-10-24
+ * @date 2024-11-03
  */
 public interface SysArchiveMapper 
 {
