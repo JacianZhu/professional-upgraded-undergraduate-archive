@@ -98,7 +98,7 @@ public class SysArchive extends BaseEntity
 
     /** 档案是否完整 */
     @Excel(name = "档案是否完整")
-    private Integer archiveComplete;
+    private String archiveComplete;
 
     /** 备注 */
     @Excel(name = "备注")
@@ -279,12 +279,12 @@ public class SysArchive extends BaseEntity
     {
         return mailingAddress;
     }
-    public void setArchiveComplete(Integer archiveComplete) 
+    public void setArchiveComplete(String archiveComplete)
     {
         this.archiveComplete = archiveComplete;
     }
 
-    public Integer getArchiveComplete() 
+    public String getArchiveComplete()
     {
         return archiveComplete;
     }
