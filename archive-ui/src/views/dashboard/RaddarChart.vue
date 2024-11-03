@@ -23,7 +23,13 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    line_char_data:{
+      type:Object,
     }
+  },
+  computed:{
+
   },
   data() {
     return {
@@ -79,7 +85,7 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Allocated Budget', 'Expected Spending', 'Actual Spending']
+          // data: ['Allocated Budget', 'Expected Spending', 'Actual Spending']
         },
         series: [{
           type: 'radar',
@@ -98,14 +104,14 @@ export default {
               value: [5000, 7000, 12000, 11000, 15000, 14000],
               name: 'Allocated Budget'
             },
-            {
-              value: [4000, 9000, 15000, 15000, 13000, 11000],
-              name: 'Expected Spending'
-            },
-            {
-              value: [5500, 11000, 12000, 15000, 12000, 12000],
-              name: 'Actual Spending'
-            }
+            // {
+            //   value: [4000, 9000, 15000, 15000, 13000, 11000],
+            //   name: 'Expected Spending'
+            // },
+            // {
+            //   value: [5500, 11000, 12000, 15000, 12000, 12000],
+            //   name: 'Actual Spending'
+            // }
           ],
           animationDuration: animationDuration
         }]

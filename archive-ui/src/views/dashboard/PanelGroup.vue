@@ -1,57 +1,59 @@
 <template>
   <el-row :gutter="40" class="panel-group">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
-        <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="peoples" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            访客
-          </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('messages')">
-        <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="message" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            消息
-          </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('purchases')">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="money" class-name="card-panel-icon" />
+          <svg-icon icon-class="women" class-name="card-panel-icon"/>
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            金额
+            老师
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="cur_headerStaticData.headTeacher" :duration="3200" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('shoppings')">
         <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+          <svg-icon icon-class="womenstudent" class-name="card-panel-icon"/>
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            订单
+            学生
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="cur_headerStaticData.student" :duration="3600" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+        <div class="card-panel-icon-wrapper icon-people">
+          <svg-icon icon-class="class_custom" class-name="card-panel-icon"/>
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            班级
+          </div>
+          <count-to :start-val="0" :end-val="cur_headerStaticData.class" :duration="2600" class="card-panel-num"/>
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData('messages')">
+        <div class="card-panel-icon-wrapper icon-message">
+          <svg-icon icon-class="express_company" class-name="card-panel-icon"/>
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            快递公司
+          </div>
+          <count-to :start-val="0" :end-val="cur_headerStaticData.courierCompany" :duration="3000"
+                    class="card-panel-num"/>
+        </div>
+      </div>
+    </el-col>
+
   </el-row>
 </template>
 
@@ -59,6 +61,32 @@
 import CountTo from 'vue-count-to'
 
 export default {
+  props: {
+    headerStaticData: {
+      type: Object,
+
+    }
+  },
+  data() {
+    return {
+      cur_headerStaticData: {
+        headTeacher: 0,
+        student: 0,
+        class: 0,
+        courierCompany: 0,
+      }
+    }
+  },
+  watch: {
+    headerStaticData: {
+      deep: true,
+      handler(val) {
+        this.cur_headerStaticData = val
+      }
+    },
+
+  },
+
   components: {
     CountTo
   },
@@ -160,7 +188,7 @@ export default {
   }
 }
 
-@media (max-width:550px) {
+@media (max-width: 550px) {
   .card-panel-description {
     display: none;
   }

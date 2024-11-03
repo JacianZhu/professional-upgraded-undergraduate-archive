@@ -1,9 +1,10 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div :class="className" :style="{height:height,width:width}"/>
 </template>
 
 <script>
 import * as echarts from 'echarts'
+
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
@@ -29,7 +30,10 @@ export default {
     chartData: {
       type: Object,
       required: true
-    }
+    },
+    // line_char_data: {
+    //   type: Object
+    // }
   },
   data() {
     return {
@@ -42,7 +46,8 @@ export default {
       handler(val) {
         this.setOptions(val)
       }
-    }
+    },
+
   },
   mounted() {
     this.$nextTick(() => {
@@ -61,13 +66,15 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     },
-    setOptions({ expectedData, actualData } = {}) {
+    setOptions({name, data} = {}) {
+      console.log(name)
+      console.log(data)
       this.chart.setOption({
         xAxis: {
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: JSON.parse(JSON.stringify(name)),
           boundaryGap: false,
           axisTick: {
-            show: false
+            show: true
           }
         },
         grid: {
@@ -90,10 +97,10 @@ export default {
           }
         },
         legend: {
-          data: ['expected', 'actual']
+          data: ['专业分布图']
         },
         series: [{
-          name: 'expected', itemStyle: {
+          name: '专业分布图', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -104,32 +111,35 @@ export default {
           },
           smooth: true,
           type: 'line',
-          data: expectedData,
+          data: data,
           animationDuration: 2800,
           animationEasing: 'cubicInOut'
         },
-        {
-          name: 'actual',
-          smooth: true,
-          type: 'line',
-          itemStyle: {
-            normal: {
-              color: '#3888fa',
-              lineStyle: {
-                color: '#3888fa',
-                width: 2
-              },
-              areaStyle: {
-                color: '#f3f8ff'
-              }
-            }
-          },
-          data: actualData,
-          animationDuration: 2800,
-          animationEasing: 'quadraticOut'
-        }]
+          // {
+          //   name: 'actual',
+          //   smooth: true,
+          //   type: 'line',
+          //   itemStyle: {
+          //     normal: {
+          //       color: '#3888fa',
+          //       lineStyle: {
+          //         color: '#3888fa',
+          //         width: 2
+          //       },
+          //       areaStyle: {
+          //         color: '#f3f8ff'
+          //       }
+          //     }
+          //   },
+          //   data: actualData,
+          //   animationDuration: 2800,
+          //   animationEasing: 'quadraticOut'
+          // }
+        ]
       })
     }
+
   }
+
 }
 </script>

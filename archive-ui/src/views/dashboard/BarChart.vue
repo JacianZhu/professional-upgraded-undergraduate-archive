@@ -35,6 +35,7 @@ export default {
       this.initChart()
     })
   },
+
   beforeDestroy() {
     if (!this.chart) {
       return

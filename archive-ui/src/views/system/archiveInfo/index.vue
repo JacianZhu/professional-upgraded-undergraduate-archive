@@ -384,7 +384,19 @@ export default {
     getList() {
       this.loading = true;
       listArchiveInfo(this.queryParams).then(response => {
-        this.archiveInfoList = response.rows;
+        // if (this.receive_or_handover == "receive") {
+        //   this.archiveInfoList = response.rows.filter(item => {
+        //     dict.type.sys_archive_status
+        //
+        //     return item.re
+        //   });
+        // } else if (this.receive_or_handover == "handover") {
+        //
+        // } else {
+        //
+        //   return
+        // }
+        this.archiveInfoList = response.rows
         this.total = response.total;
         this.loading = false;
       });
