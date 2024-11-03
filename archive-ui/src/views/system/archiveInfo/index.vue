@@ -16,7 +16,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['system:archiveInfo:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -27,7 +28,8 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:archiveInfo:edit']"
-        >修改</el-button>
+        >修改
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -38,7 +40,8 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['system:archiveInfo:remove']"
-        >删除</el-button>
+        >删除
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -48,15 +51,16 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['system:archiveInfo:export']"
-        >导出</el-button>
+        >导出
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="archiveInfoList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="档案编号" align="center" prop="archiveId" />
-      <el-table-column label="学生姓名" align="center" prop="studentName" />
+      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="档案编号" align="center" prop="archiveId"/>
+      <el-table-column label="学生姓名" align="center" prop="studentName"/>
       <el-table-column label="学生性别" align="center" prop="studentGender">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.studentGender"/>
@@ -67,21 +71,21 @@
           <span>{{ parseTime(scope.row.studentDateOfBirth, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="学生身份证号" align="center" prop="studentNationalId" />
-      <el-table-column label="毕业院校" align="center" prop="graduationSchool" />
-      <el-table-column label="毕业专业" align="center" prop="graduationMajor" />
+      <el-table-column label="学生身份证号" align="center" prop="studentNationalId"/>
+      <el-table-column label="毕业院校" align="center" prop="graduationSchool"/>
+      <el-table-column label="毕业专业" align="center" prop="graduationMajor"/>
       <el-table-column label="接收方式" align="center" prop="receiveMethod">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_receive_type" :value="scope.row.receiveMethod"/>
         </template>
       </el-table-column>
-      <el-table-column label="邮寄单号" align="center" prop="trackingNumber" />
+      <el-table-column label="邮寄单号" align="center" prop="trackingNumber"/>
       <el-table-column label="接收日期" align="center" prop="receiveDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.receiveDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="邮寄人" align="center" prop="sender" />
+      <el-table-column label="邮寄人" align="center" prop="sender"/>
       <el-table-column label="是否移交班主任" align="center" prop="handedToTeacher">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.handedToTeacher"/>
@@ -102,16 +106,16 @@
           <span>{{ parseTime(scope.row.transferDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="移交人" align="center" prop="transferPerson" />
-      <el-table-column label="档案接收人" align="center" prop="recipient" />
-      <el-table-column label="联系电话" align="center" prop="contactPhone" />
-      <el-table-column label="邮寄地址" align="center" prop="mailingAddress" />
+      <el-table-column label="移交人" align="center" prop="transferPerson"/>
+      <el-table-column label="档案接收人" align="center" prop="recipient"/>
+      <el-table-column label="联系电话" align="center" prop="contactPhone"/>
+      <el-table-column label="邮寄地址" align="center" prop="mailingAddress"/>
       <el-table-column label="档案是否完整" align="center" prop="archiveComplete">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.archiveComplete"/>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remarks" />
+      <el-table-column label="备注" align="center" prop="remarks"/>
       <el-table-column label="档案状态" align="center" prop="archiveStatus">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_archive_status" :value="scope.row.archiveStatus"/>
@@ -125,18 +129,20 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:archiveInfo:edit']"
-          >修改</el-button>
+          >修改
+          </el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:archiveInfo:remove']"
-          >删除</el-button>
+          >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -147,9 +153,9 @@
 
     <!-- 添加或修改档案信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="学生姓名" prop="studentName">
-          <el-input v-model="form.studentName" placeholder="请输入学生姓名" />
+          <el-input v-model="form.studentName" placeholder="请输入学生姓名"/>
         </el-form-item>
         <el-form-item label="学生性别" prop="studentGender">
           <el-select v-model="form.studentGender" placeholder="请选择学生性别">
@@ -163,23 +169,23 @@
         </el-form-item>
         <el-form-item label="学生出生日期" prop="studentDateOfBirth">
           <el-date-picker clearable
-            v-model="form.studentDateOfBirth"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择学生出生日期">
+                          v-model="form.studentDateOfBirth"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          placeholder="请选择学生出生日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="学生身份证号" prop="studentNationalId">
-          <el-input v-model="form.studentNationalId" placeholder="请输入学生身份证号" />
+          <el-input v-model="form.studentNationalId" placeholder="请输入学生身份证号"/>
         </el-form-item>
         <el-form-item label="毕业院校" prop="graduationSchool">
-          <el-input v-model="form.graduationSchool" placeholder="请输入毕业院校" />
+          <el-input v-model="form.graduationSchool" placeholder="请输入毕业院校"/>
         </el-form-item>
         <el-form-item label="毕业专业" prop="graduationMajor">
-          <el-input v-model="form.graduationMajor" placeholder="请输入毕业专业" />
+          <el-input v-model="form.graduationMajor" placeholder="请输入毕业专业"/>
         </el-form-item>
         <el-form-item label="接收方式" prop="receiveMethod">
-          <el-select v-model="form.receiveMethod" placeholder="请选择接收方式">
+          <el-select v-model="form.receiveMethod" placeholder="请选择接收方式" clearable>
             <el-option
               v-for="dict in dict.type.sys_receive_type"
               :key="dict.value"
@@ -188,42 +194,46 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="邮寄单号" prop="trackingNumber">
-          <el-input v-model="form.trackingNumber" placeholder="请输入邮寄单号" />
-        </el-form-item>
-        <el-form-item label="接收日期" prop="receiveDate">
-          <el-date-picker clearable
-            v-model="form.receiveDate"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择接收日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="邮寄人" prop="sender">
-          <el-input v-model="form.sender" placeholder="请输入邮寄人" />
-        </el-form-item>
-        <el-form-item label="是否移交班主任" prop="handedToTeacher">
-          <el-select v-model="form.handedToTeacher" placeholder="请选择是否移交班主任">
-            <el-option
-              v-for="dict in dict.type.sys_yes_no"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="是否拆封" prop="opened">
-          <el-select v-model="form.opened" placeholder="请选择是否拆封">
-            <el-option
-              v-for="dict in dict.type.sys_yes_no"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+        <template v-if="form.receiveMethod=='mail'">
+          <el-form-item label="邮寄单号" prop="trackingNumber">
+            <el-input v-model="form.trackingNumber" placeholder="请输入邮寄单号"/>
+          </el-form-item>
+          <el-form-item label="接收日期" prop="receiveDate" v-if="form.receiveMethod=='mail'">
+            <el-date-picker clearable
+                            v-model="form.receiveDate"
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            placeholder="请选择接收日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="邮寄人" prop="sender" v-if="form.receiveMethod=='mail'">
+            <el-input v-model="form.sender" placeholder="请输入邮寄人"/>
+          </el-form-item>
+        </template>
+        <template v-if="form.receiveMethod=='byo'">
+          <el-form-item label="是否移交班主任" prop="handedToTeacher" v-if="form.receiveMethod=='byo'">
+            <el-select v-model="form.handedToTeacher" placeholder="请选择是否移交班主任">
+              <el-option
+                v-for="dict in dict.type.sys_yes_no"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="是否拆封" prop="opened" v-if="form.receiveMethod=='byo'">
+            <el-select v-model="form.opened" placeholder="请选择是否拆封">
+              <el-option
+                v-for="dict in dict.type.sys_yes_no"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </template>
         <el-form-item label="移交方式" prop="transferMethod">
-          <el-select v-model="form.transferMethod" placeholder="请选择移交方式">
+          <el-select v-model="form.transferMethod" placeholder="请选择移交方式" clearable>
             <el-option
               v-for="dict in dict.type.sys_transfer_type"
               :key="dict.value"
@@ -232,38 +242,44 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="移交日期" prop="transferDate">
-          <el-date-picker clearable
-            v-model="form.transferDate"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择移交日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="移交人" prop="transferPerson">
-          <el-input v-model="form.transferPerson" placeholder="请输入移交人" />
-        </el-form-item>
-        <el-form-item label="档案接收人" prop="recipient">
-          <el-input v-model="form.recipient" placeholder="请输入档案接收人" />
-        </el-form-item>
-        <el-form-item label="联系电话" prop="contactPhone">
-          <el-input v-model="form.contactPhone" placeholder="请输入联系电话" />
-        </el-form-item>
-        <el-form-item label="邮寄地址" prop="mailingAddress">
-          <el-input v-model="form.mailingAddress" placeholder="请输入邮寄地址" />
-        </el-form-item>
+        <template v-if="form.transferMethod=='pickup'">
+          <el-form-item label="移交日期" prop="transferDate" v-if="form.transferMethod=='pickup'">
+            <el-date-picker clearable
+                            v-model="form.transferDate"
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            placeholder="请选择移交日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="移交人" prop="transferPerson" v-if="form.transferMethod=='pickup'">
+            <el-input v-model="form.transferPerson" placeholder="请输入移交人"/>
+          </el-form-item>
+        </template>
+        <template v-if="form.transferMethod=='email'">
+          <el-form-item label="档案接收人" prop="recipient">
+            <el-input v-model="form.recipient" placeholder="请输入档案接收人"/>
+          </el-form-item>
+          <el-form-item label="联系电话" prop="contactPhone">
+            <el-input v-model="form.contactPhone" placeholder="请输入联系电话"/>
+          </el-form-item>
+          <el-form-item label="邮寄地址" prop="mailingAddress" v-if="form.transferMethod=='email'">
+            <el-input v-model="form.mailingAddress" placeholder="请输入邮寄地址"/>
+          </el-form-item>
+        </template>
+
+
         <el-form-item label="档案是否完整" prop="archiveComplete">
-          <el-select v-model="form.archiveComplete" placeholder="请选择档案是否完整">
+          <el-select v-model="form.archiveComplete" placeholder="请选择档案是否完整" clearable>
             <el-option
               v-for="dict in dict.type.sys_yes_no"
               :key="dict.value"
               :label="dict.label"
-              :value="parseInt(dict.value)"
+              :value="dict.value"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remarks">
-          <el-input v-model="form.remarks" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.remarks" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
         <el-form-item label="档案状态" prop="archiveStatus">
           <el-select v-model="form.archiveStatus" placeholder="请选择档案状态">
@@ -285,7 +301,13 @@
 </template>
 
 <script>
-import { listArchiveInfo, getArchiveInfo, delArchiveInfo, addArchiveInfo, updateArchiveInfo } from "@/api/system/archiveInfo";
+import {
+  listArchiveInfo,
+  getArchiveInfo,
+  delArchiveInfo,
+  addArchiveInfo,
+  updateArchiveInfo
+} from "@/api/system/archiveInfo";
 
 export default {
   name: "ArchiveInfo",
@@ -318,13 +340,13 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
-      }
+      rules: {}
     };
   },
   created() {
     this.getList();
   },
+
   methods: {
     /** 查询档案信息列表 */
     getList() {
@@ -384,7 +406,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.archiveId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -392,6 +414,9 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加档案信息";
+      console.log(this.dict.type.sys_receive_type);
+      console.log(this.dict.type.sys_transfer_type);
+      console.log(this.dict.type.sys_yes_no);
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -426,12 +451,13 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const archiveIds = row.archiveId || this.ids;
-      this.$modal.confirm('是否确认删除档案信息编号为"' + archiveIds + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除档案信息编号为"' + archiveIds + '"的数据项？').then(function () {
         return delArchiveInfo(archiveIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+      }).catch(() => {
+      });
     },
     /** 导出按钮操作 */
     handleExport() {
