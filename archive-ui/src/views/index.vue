@@ -1,28 +1,41 @@
 <template>
   <div class="dashboard-editor-container">
 
-    <panel-group @handleSetLineChartData="handleSetLineChartData" :headerStaticData="headerStaticData"/>
+    <el-row :gutter="32">
 
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="line_char_data"/>
+      <el-col :span="10">
+        <personal-info>
+
+        </personal-info>
+      </el-col>
+      <el-col :span="14">
+        <panel-group @handleSetLineChartData="handleSetLineChartData" :headerStaticData="headerStaticData"/>
+
+        <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+          <pie-chart :pie_char="pie_char"/>
+
+        </el-row>
+      </el-col>
+
     </el-row>
 
     <el-row :gutter="32">
-<!--      <el-col :xs="24" :sm="24" :lg="8">-->
+      <!--      <el-col :xs="24" :sm="24" :lg="8">-->
       <!--        <div class="chart-wrapper">-->
       <!--          <raddar-chart :line_char_data="raddar_chart"/>-->
       <!--        </div>-->
       <!--      </el-col>-->
       <el-col :xs="24" :sm="24" :lg="24">
         <div class="chart-wrapper">
-          <pie-chart :pie_char="pie_char"/>
+          <line-chart :chart-data="line_char_data"/>
+
         </div>
       </el-col>
-<!--      <el-col :xs="24" :sm="24" :lg="8">-->
-<!--        <div class="chart-wrapper">-->
-<!--          <bar-chart/>-->
-<!--        </div>-->
-<!--      </el-col>-->
+      <!--      <el-col :xs="24" :sm="24" :lg="8">-->
+      <!--        <div class="chart-wrapper">-->
+      <!--          <bar-chart/>-->
+      <!--        </div>-->
+      <!--      </el-col>-->
     </el-row>
 
 
@@ -36,6 +49,7 @@ import RaddarChart from './dashboard/RaddarChart'
 import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
 import {getStatisticData, statisticsAdmissionSchool, statisticsMajor} from "@/api/dashboard";
+import PersonalInfo from "@/views/dashboard/personalInfo.vue";
 
 const lineChartData = {
   newVisitis: {
@@ -59,6 +73,7 @@ const lineChartData = {
 export default {
   name: 'Index',
   components: {
+    PersonalInfo,
     PanelGroup,
     LineChart,
     RaddarChart,
