@@ -46,7 +46,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            快递公司
+            快递
           </div>
           <count-to :start-val="0" :end-val="cur_headerStaticData.courierCompany" :duration="3000"
                     class="card-panel-num"/>
@@ -59,6 +59,7 @@
 
 <script>
 import CountTo from 'vue-count-to'
+import {mapGetters} from "vuex";
 
 export default {
   props: {
@@ -67,6 +68,7 @@ export default {
 
     }
   },
+
   data() {
     return {
       cur_headerStaticData: {
@@ -158,14 +160,14 @@ export default {
     .card-panel-icon-wrapper {
       float: left;
       margin: 14px 0 0 14px;
-      padding: 16px;
+      padding: 12px;
       transition: all 0.38s ease-out;
       border-radius: 6px;
     }
 
     .card-panel-icon {
       float: left;
-      font-size: 48px;
+      font-size: 32px;
     }
 
     .card-panel-description {
