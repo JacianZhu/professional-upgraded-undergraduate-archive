@@ -30,7 +30,7 @@
 
                 <template #default="{ row }">
                   <!-- 检查 noticeTitle 是否是链接 -->
-                  <span v-if="row.noticeType=='2'">
+                  <span v-if="row.noticeType=='3'">
       <!-- 如果是链接，显示为 a 标签并添加跳转 -->
               <el-link type="primary">
 
