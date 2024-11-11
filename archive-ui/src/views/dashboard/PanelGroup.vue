@@ -1,57 +1,66 @@
 <template>
   <el-row :gutter="40" class="panel-group">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('purchases')">
-        <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="women" class-name="card-panel-icon"/>
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            老师
+      <router-link to="/dataManagement/teacher">
+        <div class="card-panel" @click="handleSetLineChartData('purchases')">
+          <div class="card-panel-icon-wrapper icon-money">
+            <svg-icon icon-class="women" class-name="card-panel-icon"/>
           </div>
-          <count-to :start-val="0" :end-val="cur_headerStaticData.headTeacher" :duration="3200" class="card-panel-num"/>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              老师
+            </div>
+            <count-to :start-val="0" :end-val="cur_headerStaticData.headTeacher" :duration="3200"
+                      class="card-panel-num"/>
+          </div>
         </div>
-      </div>
+      </router-link>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
-        <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="womenstudent" class-name="card-panel-icon"/>
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            学生
+      <router-link to="/dataImport/admissionInfo">
+        <div class="card-panel" @click="handleSetLineChartData('shoppings')">
+          <div class="card-panel-icon-wrapper icon-shopping">
+            <svg-icon icon-class="womenstudent" class-name="card-panel-icon"/>
           </div>
-          <count-to :start-val="0" :end-val="cur_headerStaticData.student" :duration="3600" class="card-panel-num"/>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              学生
+            </div>
+            <count-to :start-val="0" :end-val="cur_headerStaticData.student" :duration="3600" class="card-panel-num"/>
+          </div>
         </div>
-      </div>
+      </router-link>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
-        <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="class_custom" class-name="card-panel-icon"/>
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            班级
+      <router-link to="/dataManagement/class">
+        <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+          <div class="card-panel-icon-wrapper icon-people">
+            <svg-icon icon-class="class_custom" class-name="card-panel-icon"/>
           </div>
-          <count-to :start-val="0" :end-val="cur_headerStaticData.class" :duration="2600" class="card-panel-num"/>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              班级
+            </div>
+            <count-to :start-val="0" :end-val="cur_headerStaticData.class" :duration="2600" class="card-panel-num"/>
+          </div>
         </div>
-      </div>
+      </router-link>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('messages')">
-        <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="express_company" class-name="card-panel-icon"/>
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            快递
+      <router-link to="/dataManagement/courierCompany">
+        <div class="card-panel" @click="handleSetLineChartData('messages')">
+          <div class="card-panel-icon-wrapper icon-message">
+            <svg-icon icon-class="express_company" class-name="card-panel-icon"/>
           </div>
-          <count-to :start-val="0" :end-val="cur_headerStaticData.courierCompany" :duration="3000"
-                    class="card-panel-num"/>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              快递
+            </div>
+            <count-to :start-val="0" :end-val="cur_headerStaticData.courierCompany" :duration="3000"
+                      class="card-panel-num"/>
+          </div>
         </div>
-      </div>
+      </router-link>
     </el-col>
 
   </el-row>

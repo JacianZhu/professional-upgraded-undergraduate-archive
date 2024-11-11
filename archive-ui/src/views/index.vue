@@ -3,18 +3,62 @@
 
     <el-row :gutter="32">
 
-      <el-col :span="10">
+      <el-col :span="9">
         <personal-info>
 
         </personal-info>
       </el-col>
-      <el-col :span="14">
-        <panel-group @handleSetLineChartData="handleSetLineChartData" :headerStaticData="headerStaticData"/>
+      <el-col :span="15">
+        <el-row>
+          <el-col :span="24">
+            <panel-group @handleSetLineChartData="handleSetLineChartData" :headerStaticData="headerStaticData"/>
+          </el-col>
+          <el-col :span="24">
+            <el-table size="mini" v-loading="loading"
+                      height="275px"
+                      :data="noticeList"
+                      header-row-class-name="header_color"
+                      :header-row-style="{backgroundColor: '#42b983'}"
+            >
+              <el-table-column label="序号" align="center" prop="noticeId" width="100"/>
+              <el-table-column
+                label="公告标题"
+                align="center"
+                prop="noticeTitle"
+                :show-overflow-tooltip="true"
+              >
 
-        <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-          <pie-chart :pie_char="pie_char"/>
+                <template #default="{ row }">
+                  <!-- 检查 noticeTitle 是否是链接 -->
+                  <span v-if="row.noticeType=='2'">
+      <!-- 如果是链接，显示为 a 标签并添加跳转 -->
+              <el-link type="primary">
+
+      <a :href="extractUrls (row.noticeContent)" target="_blank">{{ row.noticeTitle }}</a>
+              </el-link>
+    </span>
+                  <span v-else>
+      <!-- 否则显示普通文本 -->
+      {{ row.noticeTitle }}
+    </span>
+                </template>
+              </el-table-column>
+
+            </el-table>
+
+            <pagination
+              style="position: relative; margin-top: 0;height: 40px;line-height: 40px;display: flex;justify-content: center;align-items: center"
+              small
+              v-show="total>0"
+              :total="total"
+              :page.sync="queryParams.pageNum"
+              :limit.sync="queryParams.pageSize"
+              @pagination="initData"
+            />
+          </el-col>
 
         </el-row>
+
       </el-col>
 
     </el-row>
@@ -25,11 +69,22 @@
       <!--          <raddar-chart :line_char_data="raddar_chart"/>-->
       <!--        </div>-->
       <!--      </el-col>-->
-      <el-col :xs="24" :sm="24" :lg="24">
-        <div class="chart-wrapper">
-          <line-chart :chart-data="line_char_data"/>
+      <el-col :xs="24" :sm="24" :lg="12">
 
-        </div>
+
+        <router-link to="/dataImport/admissionInfo">
+          <div class="chart-wrapper">
+            <zhuzhuangtu :chart-data="line_char_data"></zhuzhuangtu>
+          </div>
+        </router-link>
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="12">
+        <router-link to="/dataImport/admissionInfo">
+          <div class="chart-wrapper">
+            <line-chart :chart-data="pie_char"/>
+
+          </div>
+        </router-link>
       </el-col>
       <!--      <el-col :xs="24" :sm="24" :lg="8">-->
       <!--        <div class="chart-wrapper">-->
@@ -50,6 +105,8 @@ import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
 import {getStatisticData, statisticsAdmissionSchool, statisticsMajor} from "@/api/dashboard";
 import PersonalInfo from "@/views/dashboard/personalInfo.vue";
+import {listNotice} from "@/api/system/notice";
+import Zhuzhuangtu from "@/views/dashboard/zhuzhuangtu.vue";
 
 const lineChartData = {
   newVisitis: {
@@ -73,6 +130,7 @@ const lineChartData = {
 export default {
   name: 'Index',
   components: {
+    Zhuzhuangtu,
     PersonalInfo,
     PanelGroup,
     LineChart,
@@ -82,17 +140,39 @@ export default {
   },
   created() {
     this.init()
+    this.initData()
   },
   data() {
     return {
+
+      total: 0,
+      loading: false,
+      layout: 'total, sizes, prev, pager, next, jumper',
+      // 公告表格数据
+      noticeList: [],
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        noticeTitle: undefined,
+        createBy: undefined,
+        status: undefined
+      },
+
       lineChartData: lineChartData.newVisitis,
       headerStaticData: {},
       line_char_data: {},
       raddar_chart: null,
-      pie_char: null
+      pie_char: {}
     }
   },
   methods: {
+    async initData() {
+
+      let listNodeRes = await listNotice();
+      this.noticeList = listNodeRes.rows;
+      this.total = listNodeRes.total;
+      this.loading = false;
+    },
     async init() {
       let getStatisticDataRes = await getStatisticData();
       this.headerStaticData = getStatisticDataRes.data
@@ -100,15 +180,15 @@ export default {
       this.line_char_data = statisticsMajorRes.data
 
       let statisticsAdmissionSchoolRes = await statisticsAdmissionSchool();
-      let temp_pie_arr = []
-      Object.keys(statisticsAdmissionSchoolRes.data).forEach((item) => {
-        let res = {}
-        res.name = item
-        res.value = statisticsAdmissionSchoolRes.data[item]
-        temp_pie_arr.push(res)
-      })
-      this.pie_char = temp_pie_arr
-      console.log(this.pie_char)
+      // let temp_pie_arr = []
+      // Object.keys(statisticsAdmissionSchoolRes.data).forEach((item) => {
+      //   let res = {}
+      //   res.name = item
+      //   res.value = statisticsAdmissionSchoolRes.data[item]
+      //   temp_pie_arr.push(res)
+      // })
+
+      this.pie_char = statisticsAdmissionSchoolRes.data
     },
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]

@@ -10,7 +10,7 @@ export function getStatisticData() {
 
 export function statisticsMajor() {
   return request({
-    url: '/dashboard/statisticsMajor\n',
+    url: '/dashboard/statisticsMajor',
     method: 'get',
   })
 }

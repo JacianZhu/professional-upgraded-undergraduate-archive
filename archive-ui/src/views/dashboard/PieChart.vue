@@ -21,10 +21,10 @@ export default {
     },
     height: {
       type: String,
-      default: '300px'
+      default: '350px'
     },
     pie_char: {
-      type: Array
+      type: Object
     }
   },
   data() {
