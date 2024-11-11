@@ -97,10 +97,10 @@ export default {
           }
         },
         legend: {
-          data: ['专业分布图']
+          data: ['']
         },
         series: [{
-          name: '专业分布图', itemStyle: {
+          name: 'a', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {

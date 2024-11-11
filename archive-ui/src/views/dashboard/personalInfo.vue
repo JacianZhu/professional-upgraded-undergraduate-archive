@@ -7,68 +7,61 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            {{ name }}
+            姓名:{{ name }}
+          </div>
+          <div class="card-panel-text" style="flex: 1;display: flex;align-items: end; font-size: 12px">
+            角色: {{ roles[0] }}
+          </div>
+          <div class="card-panel-text" style="flex: 1;display: flex;align-items: end; font-size: 12px">
+            上一次登录时间: {{ formatterTimer(date) }}
           </div>
         </div>
       </div>
     </el-col>
-    <el-col :span="24">
-      <el-table size="mini" v-loading="loading"
-                height="275px"
-                :data="noticeList"
-                header-row-class-name="header_color"
-                :header-row-style="{backgroundColor: '#42b983'}"
-      >
-        <el-table-column label="序号" align="center" prop="noticeId" width="100"/>
-        <el-table-column
-          label="公告标题"
-          align="center"
-          prop="noticeTitle"
-          :show-overflow-tooltip="true"
-        >
+<!--    <el-col :span="24">-->
+<!--      <el-table size="mini" v-loading="loading"-->
+<!--                height="275px"-->
+<!--                :data="noticeList"-->
+<!--                header-row-class-name="header_color"-->
+<!--                :header-row-style="{backgroundColor: '#42b983'}"-->
+<!--      >-->
+<!--        <el-table-column label="序号" align="center" prop="noticeId" width="100"/>-->
+<!--        <el-table-column-->
+<!--          label="公告标题"-->
+<!--          align="center"-->
+<!--          prop="noticeTitle"-->
+<!--          :show-overflow-tooltip="true"-->
+<!--        >-->
 
-          <template #default="{ row }">
-            <!-- 检查 noticeTitle 是否是链接 -->
-            <span v-if="row.noticeType=='3'">
-      <!-- 如果是链接，显示为 a 标签并添加跳转 -->
-              <el-link type="primary">
+<!--          <template #default="{ row }">-->
+<!--            &lt;!&ndash; 检查 noticeTitle 是否是链接 &ndash;&gt;-->
+<!--            <span v-if="row.noticeType=='2'">-->
+<!--      &lt;!&ndash; 如果是链接，显示为 a 标签并添加跳转 &ndash;&gt;-->
+<!--              <el-link type="primary">-->
 
-      <a :href="extractUrls (row.noticeContent)" target="_blank">{{ row.noticeTitle }}</a>
-              </el-link>
-    </span>
-            <span v-else>
-      <!-- 否则显示普通文本 -->
-      {{ row.noticeTitle }}
-    </span>
-          </template>
-        </el-table-column>
+<!--      <a :href="extractUrls (row.noticeContent)" target="_blank">{{ row.noticeTitle }}</a>-->
+<!--              </el-link>-->
+<!--    </span>-->
+<!--            <span v-else>-->
+<!--      &lt;!&ndash; 否则显示普通文本 &ndash;&gt;-->
+<!--      {{ row.noticeTitle }}-->
+<!--    </span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
-      </el-table>
+<!--      </el-table>-->
 
-      <pagination
-        style="margin-top: 0;height: 40px;line-height: 40px;display: flex;justify-content: center;align-items: center"
-        small
-        v-show="total>0"
-        :total="total"
-        :page.sync="queryParams.pageNum"
-        :limit.sync="queryParams.pageSize"
-        @pagination="initData"
-      />
+<!--      <pagination-->
+<!--        style="position: relative; margin-top: 0;height: 40px;line-height: 40px;display: flex;justify-content: center;align-items: center"-->
+<!--        small-->
+<!--        v-show="total>0"-->
+<!--        :total="total"-->
+<!--        :page.sync="queryParams.pageNum"-->
+<!--        :limit.sync="queryParams.pageSize"-->
+<!--        @pagination="initData"-->
+<!--      />-->
 
-
-      <!--      <el-pagination-->
-      <!--        :background="{backgroundColor:'#fff'}"-->
-      <!--        :current-page.sync="20"-->
-      <!--        :page-size.sync="20"-->
-      <!--        :layout="layout"-->
-      <!--        :page-sizes="pageSizes"-->
-      <!--        :pager-count="pagerCount"-->
-      <!--        :total="total"-->
-      <!--        v-bind="$attrs"-->
-      <!--        @size-change="handleSizeChange"-->
-      <!--        @current-change="handleCurrentChange"-->
-      <!--      />-->
-    </el-col>
+<!--    </el-col>-->
   </el-row>
 </template>
 
@@ -76,6 +69,7 @@
 import CountTo from "vue-count-to";
 import {mapGetters} from "vuex";
 import {listNotice} from "@/api/system/notice";
+import role from "@/views/system/role/index.vue";
 
 export default {
   name: "personalInfo",
@@ -94,12 +88,15 @@ export default {
         createBy: undefined,
         status: undefined
       },
+
     }
   },
   computed: {
     ...mapGetters([
       'avatar',
-      "name"
+      "name",
+      "roles",
+      "date"
     ]),
   },
   created() {
@@ -107,12 +104,29 @@ export default {
   },
 
   methods: {
+
     async initData() {
 
       let listNodeRes = await listNotice();
       this.noticeList = listNodeRes.rows;
       this.total = listNodeRes.total;
       this.loading = false;
+    },
+
+    formatterTimer(dateStr) {
+      // const dateStr = "2024-11-10T21:57:22.000+08:00";
+      const date = new Date(dateStr);
+
+// 格式化为 "YYYY-MM-DD HH:mm:ss" 格式
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以加1
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+
+      const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      return formattedDate
     },
     extractUrls(text) {
       if (!text) {
@@ -153,7 +167,8 @@ export default {
 
 
   .card-panel {
-    height: 108px;
+    //height: 100%;
+    height: 450px;
     cursor: pointer;
     font-size: 12px;
     position: relative;
@@ -184,8 +199,9 @@ export default {
 
     .card-panel-description {
       display: flex;
+      flex-direction: column;
       flex: 1;
-      justify-content: center;
+      justify-content: space-around;
       align-items: center;
     }
 
