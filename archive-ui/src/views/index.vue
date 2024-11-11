@@ -166,6 +166,18 @@ export default {
     }
   },
   methods: {
+    extractUrls(text) {
+      if (!text) {
+        return ""
+      }
+      // const urlPattern = /\b((https?:\/\/|www\.)[^\s]+\.[^\s]{2,})\b/g;
+      const urlPattern = /((https?:\/\/|www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+([\/?&=#.]?[^\s<]*)?)/g;
+      let NormalUrl = text.match(urlPattern) || [];
+      if (NormalUrl[0] && !NormalUrl[0].startsWith('http://') && !NormalUrl[0].startsWith('https://')) {
+        return `https://${NormalUrl[0]}`
+      }
+      return NormalUrl[0]
+    },
     async initData() {
 
       let listNodeRes = await listNotice();
