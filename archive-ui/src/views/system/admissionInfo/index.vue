@@ -25,6 +25,13 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="录取状态" prop="admissionStatus">
+        <el-select v-model="queryParams.admissionStatus" placeholder="请选择录取状态" clearable>
+          <el-option label="已录取" value="已录取"></el-option>
+          <el-option label="待录取" value="待录取"></el-option>
+          <el-option label="未录取" value="未录取"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -200,6 +207,41 @@
         </el-form-item>
         <el-form-item label="成绩" prop="examScore">
           <el-input v-model="form.examScore" placeholder="请输入成绩" />
+        </el-form-item>
+        <el-form-item label="性别" prop="gender">
+          <el-select v-model="form.gender" placeholder="请选择性别">
+            <el-option label="男" value="男"></el-option>
+            <el-option label="女" value="女"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="录取类型" prop="admissionType">
+          <el-select v-model="form.admissionType" placeholder="请选择录取类型">
+            <el-option label="统招" value="统招"></el-option>
+            <el-option label="普通录取" value="普通录取"></el-option>
+            <el-option label="提前录取" value="提前录取"></el-option>
+            <el-option label="自主招生" value="自主招生"></el-option>
+            <el-option label="保送生" value="保送生"></el-option>
+            <el-option label="特长生" value="特长生"></el-option>
+            <el-option label="国际生" value="国际生"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="考生类别" prop="candidateType">
+          <el-select v-model="form.candidateType" placeholder="请选择考生类别">
+            <el-option label="普通考生" value="普通考生"></el-option>
+            <el-option label="艺术类考生" value="艺术类考生"></el-option>
+            <el-option label="体育类考生" value="体育类考生"></el-option>
+            <el-option label="少数民族考生" value="少数民族考生"></el-option>
+            <el-option label="自主招生考生" value="自主招生考生"></el-option>
+            <el-option label="国际考生" value="国际考生"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="录取状态" prop="admissionStatus">
+          <el-select v-model="form.admissionStatus" placeholder="请选择录取状态">
+            <el-option label="已录取" value="已录取"></el-option>
+            <el-option label="待录取" value="待录取"></el-option>
+            <el-option label="未录取" value="未录取"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remarks">
           <el-input v-model="form.remarks" placeholder="请输入备注" />

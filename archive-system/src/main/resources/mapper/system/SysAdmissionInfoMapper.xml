@@ -41,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
             <if test="idNumber != null  and idNumber != ''"> and id_number = #{idNumber}</if>
             <if test="studentId != null  and studentId != ''"> and student_id = #{studentId}</if>
+            <if test="admissionStatus != null  and admissionStatus != ''"> and admission_status = #{admissionStatus}</if>
         </where>
     </select>
     

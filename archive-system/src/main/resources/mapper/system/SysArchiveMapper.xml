@@ -38,7 +38,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysArchiveList" parameterType="SysArchive" resultMap="SysArchiveResult">
         <include refid="selectSysArchiveVo"/>
-        <where>  
+        <where>
+            <if test="studentName != null and studentName != ''">
+                student_name = #{studentName}
+            </if>
         </where>
     </select>
     
