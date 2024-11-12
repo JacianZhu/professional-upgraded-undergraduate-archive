@@ -91,7 +91,7 @@ export default {
           }
         }],
         series: [{
-          name: 'pageA',
+          name: '人数',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',

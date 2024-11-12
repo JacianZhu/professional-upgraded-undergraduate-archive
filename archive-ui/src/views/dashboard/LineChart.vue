@@ -100,7 +100,7 @@ export default {
           data: ['']
         },
         series: [{
-          name: 'a', itemStyle: {
+          name: '学生人数', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {

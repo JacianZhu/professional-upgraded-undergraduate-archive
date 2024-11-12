@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,9 +76,27 @@ public class DashboardController {
     @GetMapping("/statisticsAdmissionSchool")
     public AjaxResult statisticsAdmissionSchool() {
         List<SysAdmissionInfo> sysAdmissionInfos = sysAdmissionInfoService.selectSysAdmissionInfoList(new SysAdmissionInfo());
-        Map<String, Long> collect = sysAdmissionInfos.stream()
-                .collect(Collectors.groupingBy(SysAdmissionInfo::getAdmittedUniversity, Collectors.counting()));
-        return AjaxResult.success(collect);
+        Map<String, List<SysAdmissionInfo>> groupedByYear = sysAdmissionInfos.stream()
+                .collect(Collectors.groupingBy(info -> {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+                    return sdf.format(info.getAdmissionDate());
+                }));
+        // 提取并排序年份
+        List<String> years = groupedByYear.keySet().stream()
+                .sorted() // 对年份进行升序排序
+                .collect(Collectors.toList());
+
+        List<Long> counts = years.stream()
+                .map(year -> (long) groupedByYear.get(year).size())
+                .collect(Collectors.toList());
+
+        // 创建结果 Map
+        Map<String, List<?>> result = new HashMap<>(16);
+        result.put("name", years);
+        result.put("data", counts);
+
+
+        return AjaxResult.success(result);
     }
 
 
