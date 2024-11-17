@@ -120,13 +120,13 @@
         <el-form-item label="班级名称" prop="className">
           <el-input v-model="form.className" placeholder="请输入班级名称"/>
         </el-form-item>
-        <el-form-item label="老师" prop="className">
+        <el-form-item label="老师" prop="headTeacherId">
           <el-select style="width: 100%" v-model="form.headTeacherId" placeholder="请选择">
             <el-option
               v-for="item in teacher_list"
               :key="item.value"
               :label="item.label"
-              :value="item.value">
+            :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
@@ -191,7 +191,7 @@ export default {
         headers: {Authorization: "Bearer " + getToken()},
         // 上传的地址
         url: process.env.VUE_APP_BASE_API + "/system/class/import",
-        download_url:"system/user/importTemplate"
+        download_url: "system/user/importTemplate"
       },
       teacher_list: [],
       profession_list: [],
@@ -228,7 +228,9 @@ export default {
     };
   },
   created() {
-    this.getList();
+    this.get_teacher_and_profession_list().then(() => {
+      this.getList(); // 确保在获取班级列表之前，教师列表已经加载
+    });
   },
   methods: {
     /** 导入按钮操作 */
@@ -315,15 +317,14 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const classId = row.classId || this.ids
-      this.get_teacher_and_profession_list().then(res => {
+      const classId = row.classId || this.ids;
+      this.get_teacher_and_profession_list().then(() => {
         getClass(classId).then(response => {
           this.form = response.data;
           this.open = true;
           this.title = "修改班级管理";
         });
-      })
-
+      });
     },
     /** 提交按钮 */
     submitForm() {

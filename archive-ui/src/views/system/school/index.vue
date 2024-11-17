@@ -120,7 +120,14 @@
           <el-input v-model="form.graduateSchoolName" placeholder="请输入毕业院校名称" />
         </el-form-item>
         <el-form-item label="专科专业名称" prop="specialtyName">
-          <el-input v-model="form.specialtyName" placeholder="请输入专科专业名称" />
+          <el-select v-model="form.specialtyName" placeholder="请选择专科专业名称" style="width: 100%">
+            <el-option
+              v-for="item in specialtyList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -135,6 +142,15 @@
 
 <script>
 import { listSchool, getSchool, delSchool, addSchool, updateSchool } from "@/api/system/school";
+import {
+  listClass,
+  getClass,
+  delClass,
+  addClass,
+  updateClass,
+  getSpecialtyList,
+  getHeadTeacherList
+} from "@/api/system/class";
 import {getToken} from "@/utils/auth";
 import ImportFile from "@/views/components/ImportFile.vue";
 
@@ -172,6 +188,7 @@ export default {
       total: 0,
       // 毕业院校管理表格数据
       schoolList: [],
+      specialtyList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -198,6 +215,7 @@ export default {
   },
   created() {
     this.getList();
+    this.getSpecialtyList();
   },
   methods: {
     /** 导入按钮操作 */
@@ -218,6 +236,14 @@ export default {
         this.schoolList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    getSpecialtyList() {
+      getSpecialtyList().then(response => {
+        this.specialtyList = response.data.map(item => ({
+          value: item.specialtyName,
+          label: item.specialtyName
+        }));
       });
     },
     // 取消按钮

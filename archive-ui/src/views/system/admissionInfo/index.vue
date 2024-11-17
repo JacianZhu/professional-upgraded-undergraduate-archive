@@ -95,55 +95,68 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="admissionInfoList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="录取编号" align="center" prop="admissionId" />
-      <el-table-column label="学生姓名" align="center" prop="studentName" />
-      <el-table-column label="身份证号" align="center" prop="idNumber" />
-      <el-table-column label="学号" align="center" prop="studentId" />
-      <el-table-column label="性别" align="center" prop="gender" />
-      <el-table-column label="毕业院校" align="center" prop="graduateSchool" />
-      <el-table-column label="专科专业" align="center" prop="diplomaSpecialty" />
-      <el-table-column label="毕业时间" align="center" prop="graduationDate" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.graduationDate, '{y}-{m}-{d}') }}</span>
+
+    <el-collapse v-model="activeNames">
+      <el-collapse-item
+        v-for="(group, key) in sortedGroupedData"
+        :key="key"
+        :name="key"
+      >
+        <template #title>
+          {{ key }}
         </template>
-      </el-table-column>
-      <el-table-column label="录取本科院校" align="center" prop="admittedUniversity" />
-      <el-table-column label="本科专业" align="center" prop="admittedSpecialty" />
-      <el-table-column label="录取批次" align="center" prop="admissionBatch" />
-      <el-table-column label="录取日期" align="center" prop="admissionDate" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.admissionDate, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="录取状态" align="center" prop="admissionStatus" />
-      <el-table-column label="联系电话" align="center" prop="contactNumber" />
-      <el-table-column label="联系地址" align="center" prop="contactAddress" />
-      <el-table-column label="录取类型" align="center" prop="admissionType" />
-      <el-table-column label="考生类别" align="center" prop="candidateType" />
-      <el-table-column label="准考证号" align="center" prop="examTicketNumber" />
-      <el-table-column label="成绩" align="center" prop="examScore" />
-      <el-table-column label="备注" align="center" prop="remarks" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"  fixed="right">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:admissionInfo:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:admissionInfo:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table :data="group" style="width: 100%">
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="录取编号" align="center" prop="admissionId" />
+          <el-table-column label="学生姓名" align="center" prop="studentName" />
+          <el-table-column label="身份证号" align="center" prop="idNumber" />
+          <el-table-column label="学号" align="center" prop="studentId" />
+          <el-table-column label="性别" align="center" prop="gender" />
+          <el-table-column label="毕业院校" align="center" prop="graduateSchool" />
+          <el-table-column label="专科专业" align="center" prop="diplomaSpecialty" />
+          <el-table-column label="毕业时间" align="center" prop="graduationDate" width="180">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.graduationDate, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="录取本科院校" align="center" prop="admittedUniversity" />
+          <el-table-column label="本科专业" align="center" prop="admittedSpecialty" />
+          <el-table-column label="录取批次" align="center" prop="admissionBatch" />
+          <el-table-column label="录取日期" align="center" prop="admissionDate" width="180">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.admissionDate, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="录取状态" align="center" prop="admissionStatus" />
+          <el-table-column label="联系电话" align="center" prop="contactNumber" />
+          <el-table-column label="联系地址" align="center" prop="contactAddress" />
+          <el-table-column label="录取类型" align="center" prop="admissionType" />
+          <el-table-column label="考生类别" align="center" prop="candidateType" />
+          <el-table-column label="准考证号" align="center" prop="examTicketNumber" />
+          <el-table-column label="成绩" align="center" prop="examScore" />
+          <el-table-column label="备注" align="center" prop="remarks" />
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width"  fixed="right">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['system:admissionInfo:edit']"
+              >修改</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['system:admissionInfo:remove']"
+              >删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-collapse-item>
+    </el-collapse>
+
 
     <pagination
       v-show="total>0"
@@ -266,6 +279,7 @@ export default {
   components: {ImportFile},
   data() {
     return {
+      activeNames: [], // 控制展开的面板
       upload: {
         // 是否显示弹出层（用户导入）
         open: false,
@@ -313,6 +327,36 @@ export default {
       rules: {
       }
     };
+  },
+  computed: {
+    groupedData() {
+      return this.admissionInfoList.reduce((acc, item) => {
+        const year = new Date(item.admissionDate).getFullYear();
+        const specialty = item.admittedSpecialty || '未分类';
+        const key = `${year} ${specialty}`;
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(item);
+        return acc;
+      }, {});
+    },
+    sortedGroupedData() {
+      const sortedKeys = Object.keys(this.groupedData).sort((a, b) => {
+        const [yearA, specialtyA] = a.split(' ');
+        const [yearB, specialtyB] = b.split(' ');
+        if (yearA === yearB) {
+          return specialtyA.localeCompare(specialtyB);
+        }
+        return yearA - yearB;
+      });
+      console.log(sortedKeys);
+      console.log(this.groupedData);
+      return sortedKeys.reduce((acc, key) => {
+        acc[key] = this.groupedData[key];
+        return acc;
+      }, {});
+    }
   },
   created() {
     this.getList();
