@@ -61,7 +61,6 @@ public class SysAdmissionInfoController extends BaseController {
 
 
     @Log(title = "录取信息导入", businessType = BusinessType.IMPORT)
-   // @PreAuthorize("@ss.hasPermi('system:admissionInfo:import')")
     @PostMapping("/import")
     public AjaxResult importData(MultipartFile file) throws Exception {
         ExcelUtil<SysAdmissionInfo> util = new ExcelUtil<>(SysAdmissionInfo.class);

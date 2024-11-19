@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container" v-if="roles == 'student'">
+    <div class="app-container" v-if="roles === 'student'">
         <el-descriptions class="margin-top" title="个人档案" :column="3" size="medium" border>
             <el-descriptions-item>
                 <template slot="label">
@@ -158,80 +158,94 @@
             <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
 
-        <el-table v-loading="loading" :data="archiveInfoList" @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55" align="center" />
-            <el-table-column label="档案编号" align="center" prop="archiveId" />
-            <el-table-column label="学生姓名" align="center" prop="studentName" />
-            <el-table-column label="学生性别" align="center" prop="studentGender">
+      <el-collapse v-model="activeNames">
+        <el-collapse-item
+          v-for="(group, key) in sortedGroupedData"
+          :key="key"
+          :name="key"
+        >
+          <template #title>
+            {{ key }}
+          </template>
+          <el-table :data="group" style="width: 100%">
+
+              <el-table-column type="selection" width="55" align="center" />
+              <el-table-column label="档案编号" align="center" prop="archiveId" />
+              <el-table-column label="学生姓名" align="center" prop="studentName" />
+              <el-table-column label="学生性别" align="center" prop="studentGender">
                 <template slot-scope="scope">
-                    <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.studentGender" />
+                  <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.studentGender" />
                 </template>
-            </el-table-column>
-            <el-table-column label="学生出生日期" align="center" prop="studentDateOfBirth" width="180">
+              </el-table-column>
+              <el-table-column label="学生出生日期" align="center" prop="studentDateOfBirth" width="180">
                 <template slot-scope="scope">
-                    <span>{{ parseTime(scope.row.studentDateOfBirth, '{y}-{m}-{d}') }}</span>
+                  <span>{{ parseTime(scope.row.studentDateOfBirth, '{y}-{m}-{d}') }}</span>
                 </template>
-            </el-table-column>
-            <el-table-column label="学生身份证号" align="center" prop="studentNationalId" />
-            <el-table-column label="毕业院校" align="center" prop="graduationSchool" />
-            <el-table-column label="毕业专业" align="center" prop="graduationMajor" />
-            <el-table-column label="接收方式" align="center" prop="receiveMethod">
+              </el-table-column>
+              <el-table-column label="学生身份证号" align="center" prop="studentNationalId" />
+              <el-table-column label="毕业院校" align="center" prop="graduationSchool" />
+              <el-table-column label="毕业专业" align="center" prop="graduationMajor" />
+              <el-table-column label="接收方式" align="center" prop="receiveMethod">
                 <template slot-scope="scope">
-                    <dict-tag :options="dict.type.sys_receive_type" :value="scope.row.receiveMethod" />
+                  <dict-tag :options="dict.type.sys_receive_type" :value="scope.row.receiveMethod" />
                 </template>
-            </el-table-column>
-            <el-table-column label="邮寄单号" align="center" prop="trackingNumber" />
-            <el-table-column label="接收日期" align="center" prop="receiveDate" width="180">
+              </el-table-column>
+              <el-table-column label="邮寄单号" align="center" prop="trackingNumber" />
+              <el-table-column label="接收日期" align="center" prop="receiveDate" width="180">
                 <template slot-scope="scope">
-                    <span>{{ parseTime(scope.row.receiveDate, '{y}-{m}-{d}') }}</span>
+                  <span>{{ parseTime(scope.row.receiveDate, '{y}-{m}-{d}') }}</span>
                 </template>
-            </el-table-column>
-            <el-table-column label="邮寄人" align="center" prop="sender" />
-            <el-table-column label="是否移交班主任" align="center" prop="handedToTeacher">
+              </el-table-column>
+              <el-table-column label="邮寄人" align="center" prop="sender" />
+              <el-table-column label="是否移交班主任" align="center" prop="handedToTeacher">
                 <template slot-scope="scope">
-                    <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.handedToTeacher" />
+                  <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.handedToTeacher" />
                 </template>
-            </el-table-column>
-            <el-table-column label="是否拆封" align="center" prop="opened">
+              </el-table-column>
+              <el-table-column label="是否拆封" align="center" prop="opened">
                 <template slot-scope="scope">
-                    <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.opened" />
+                  <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.opened" />
                 </template>
-            </el-table-column>
-            <el-table-column label="移交方式" align="center" prop="transferMethod">
+              </el-table-column>
+              <el-table-column label="移交方式" align="center" prop="transferMethod">
                 <template slot-scope="scope">
-                    <dict-tag :options="dict.type.sys_transfer_type" :value="scope.row.transferMethod" />
+                  <dict-tag :options="dict.type.sys_transfer_type" :value="scope.row.transferMethod" />
                 </template>
-            </el-table-column>
-            <el-table-column label="移交日期" align="center" prop="transferDate" width="180">
+              </el-table-column>
+              <el-table-column label="移交日期" align="center" prop="transferDate" width="180">
                 <template slot-scope="scope">
-                    <span>{{ parseTime(scope.row.transferDate, '{y}-{m}-{d}') }}</span>
+                  <span>{{ parseTime(scope.row.transferDate, '{y}-{m}-{d}') }}</span>
                 </template>
-            </el-table-column>
-            <el-table-column label="移交人" align="center" prop="transferPerson" />
-            <el-table-column label="档案接收人" align="center" prop="recipient" />
-            <el-table-column label="联系电话" align="center" prop="contactPhone" />
-            <el-table-column label="邮寄地址" align="center" prop="mailingAddress" />
-            <el-table-column label="档案是否完整" align="center" prop="archiveComplete">
+              </el-table-column>
+              <el-table-column label="移交人" align="center" prop="transferPerson" />
+              <el-table-column label="档案接收人" align="center" prop="recipient" />
+              <el-table-column label="联系电话" align="center" prop="contactPhone" />
+              <el-table-column label="邮寄地址" align="center" prop="mailingAddress" />
+              <el-table-column label="档案是否完整" align="center" prop="archiveComplete">
                 <template slot-scope="scope">
-                    <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.archiveComplete" />
+                  <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.archiveComplete" />
                 </template>
-            </el-table-column>
-            <!-- <el-table-column label="备注" align="center" prop="remarks" /> -->
-            <el-table-column label="档案状态" align="center" prop="archiveStatus">
+              </el-table-column>
+              <!-- <el-table-column label="备注" align="center" prop="remarks" /> -->
+              <el-table-column label="档案状态" align="center" prop="archiveStatus">
                 <template slot-scope="scope">
-                    <dict-tag :options="dict.type.sys_archive_status" :value="scope.row.archiveStatus" />
+                  <dict-tag :options="dict.type.sys_archive_status" :value="scope.row.archiveStatus" />
                 </template>
-            </el-table-column>
-            <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="250">
+              </el-table-column>
+              <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="250">
                 <template slot-scope="scope">
-                    <el-button size="mini" type="text" icon="el-icon-edit" @click="recordLogo(scope.row)">档案</el-button>
-                    <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-                        v-hasPermi="['system:archiveInfo:edit']">修改</el-button>
-                    <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-                        v-hasPermi="['system:archiveInfo:remove']">删除</el-button>
+                  <el-button size="mini" type="text" icon="el-icon-edit" @click="recordLogo(scope.row)">档案</el-button>
+                  <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                             v-hasPermi="['system:archiveInfo:edit']">修改</el-button>
+                  <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                             v-hasPermi="['system:archiveInfo:remove']">删除</el-button>
                 </template>
-            </el-table-column>
-        </el-table>
+              </el-table-column>
+          </el-table>
+        </el-collapse-item>
+      </el-collapse>
+
+
 
         <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum"
             :limit.sync="queryParams.pageSize" @pagination="getList" />
@@ -478,6 +492,7 @@ export default {
     dicts: ['sys_receive_type', 'sys_yes_no', 'sys_archive_status', 'sys_user_sex', 'sys_transfer_type'],
     data() {
         return {
+          activeNames: [], // 控制展开的面板
             list: {},//个人档案
             roles: '',//权限字符
             // 遮罩层
@@ -516,10 +531,40 @@ export default {
             }
         };
     },
+  computed: {
+    groupedData() {
+      return this.archiveInfoList.reduce((acc, item) => {
+        const year = new Date(item.studentDateOfBirth).getFullYear();
+        const specialty = item.graduationMajor || '未分类';
+        const key = `${year} ${specialty}`;
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(item);
+        return acc;
+      }, {});
+    },
+    sortedGroupedData() {
+      const sortedKeys = Object.keys(this.groupedData).sort((a, b) => {
+        const [yearA, specialtyA] = a.split(' ');
+        const [yearB, specialtyB] = b.split(' ');
+        if (yearA === yearB) {
+          return specialtyA.localeCompare(specialtyB);
+        }
+        return yearA - yearB;
+      });
+      return sortedKeys.reduce((acc, key) => {
+        acc[key] = this.groupedData[key];
+        return acc;
+      }, {});
+    }
+  },
     created() {
-        this.roles = this.$store.state.user.roles[0]
-        this.addSelectSysArchiveByName()
-        this.getList();
+      this.roles = this.$store.state.user.roles[0];
+      if (this.roles === 'student') {
+        this.addSelectSysArchiveByName();
+      }
+      this.getList();
     },
 
     methods: {

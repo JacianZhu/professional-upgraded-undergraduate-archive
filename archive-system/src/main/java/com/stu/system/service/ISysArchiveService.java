@@ -1,6 +1,8 @@
 package com.stu.system.service;
 
 import java.util.List;
+
+import com.stu.system.domain.SysAdmissionInfo;
 import com.stu.system.domain.SysArchive;
 
 /**
@@ -58,4 +60,8 @@ public interface ISysArchiveService
      * @return 结果
      */
     public int deleteSysArchiveByArchiveId(Long archiveId);
+
+
+    public String importArchiveInfo(List<SysArchive> archiveInfoList, String operatorName);
+
 }

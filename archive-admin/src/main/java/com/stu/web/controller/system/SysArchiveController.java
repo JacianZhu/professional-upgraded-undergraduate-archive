@@ -4,6 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.stu.common.core.domain.entity.SysUser;
+import com.stu.system.domain.SysAdmissionInfo;
 import com.stu.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import com.stu.system.domain.SysArchive;
 import com.stu.system.service.ISysArchiveService;
 import com.stu.common.utils.poi.ExcelUtil;
 import com.stu.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 档案信息Controller
@@ -53,6 +55,16 @@ public class SysArchiveController extends BaseController {
         List<SysArchive> list = sysArchiveService.selectSysArchiveList(sysArchive);
         ExcelUtil<SysArchive> util = new ExcelUtil<SysArchive>(SysArchive.class);
         util.exportExcel(response, list, "档案信息数据");
+    }
+
+    @Log(title = "档案信息导入", businessType = BusinessType.IMPORT)
+    @PostMapping("/import")
+    public AjaxResult importData(MultipartFile file) throws Exception {
+        ExcelUtil<SysArchive> util = new ExcelUtil<>(SysArchive.class);
+        List<SysArchive> sysAdmissionInfoList = util.importExcel(file.getInputStream());
+        String operatorName = getUsername();
+        String message = sysArchiveService.importArchiveInfo(sysAdmissionInfoList, operatorName);
+        return success(message);
     }
 
     /**

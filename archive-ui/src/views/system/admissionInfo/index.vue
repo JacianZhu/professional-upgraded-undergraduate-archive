@@ -374,8 +374,6 @@ export default {
         }
         return yearA - yearB;
       });
-      console.log(sortedKeys);
-      console.log(this.groupedData);
       return sortedKeys.reduce((acc, key) => {
         acc[key] = this.groupedData[key];
         return acc;
