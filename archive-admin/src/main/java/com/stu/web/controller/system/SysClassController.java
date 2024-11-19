@@ -3,9 +3,8 @@ package com.stu.web.controller.system;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
-import com.stu.system.domain.SysAdmissionInfo;
-import com.stu.system.domain.SysHeadTeacher;
-import com.stu.system.domain.SysSpecialty;
+import com.stu.system.domain.*;
+import com.stu.system.service.ISysGraduateSchoolService;
 import com.stu.system.service.ISysHeadTeacherService;
 import com.stu.system.service.ISysSpecialtyService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +21,6 @@ import com.stu.common.annotation.Log;
 import com.stu.common.core.controller.BaseController;
 import com.stu.common.core.domain.AjaxResult;
 import com.stu.common.enums.BusinessType;
-import com.stu.system.domain.SysClass;
 import com.stu.system.service.ISysClassService;
 import com.stu.common.utils.poi.ExcelUtil;
 import com.stu.common.core.page.TableDataInfo;
@@ -45,6 +43,9 @@ public class SysClassController extends BaseController {
 
     @Autowired
     private ISysHeadTeacherService sysHeadTeacherService;
+
+    @Autowired
+    private ISysGraduateSchoolService sysGraduateSchoolService;
 
     /**
      * 查询班级管理列表
@@ -129,5 +130,10 @@ public class SysClassController extends BaseController {
     @GetMapping("/getHeadTeacherList")
     public AjaxResult getHeadTeacherList() {
         return success(sysHeadTeacherService.selectSysHeadTeacherList(new SysHeadTeacher()));
+    }
+
+    @GetMapping("/getSchoolList")
+    public AjaxResult getSchoolList() {
+        return success(sysGraduateSchoolService.selectSysGraduateSchoolList(new SysGraduateSchool()));
     }
 }

@@ -132,6 +132,9 @@
         <el-form-item label="联系电话" prop="contactNumber">
           <el-input v-model="form.contactNumber" placeholder="请输入联系电话" />
         </el-form-item>
+        <el-form-item label="身份证" prop="idNumber">
+          <el-input v-model="form.idNumber" placeholder="请输入身份证号码" />
+        </el-form-item>
         <el-form-item label="邮编" prop="postalCode">
           <el-input v-model="form.postalCode" placeholder="请输入邮编" />
         </el-form-item>
@@ -249,7 +252,8 @@ export default {
         createBy: null,
         createTime: null,
         updateBy: null,
-        updateTime: null
+        updateTime: null,
+        idNumber: null
       };
       this.resetForm("form");
     },

@@ -13,10 +13,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="idNumber"    column="id_number"    />
     </resultMap>
 
     <sql id="selectSysHeadTeacherVo">
-        select head_teacher_id, head_teacher_name, department_name, contact_number, create_by, create_time, update_by, update_time from sys_head_teacher
+        select head_teacher_id, head_teacher_name, department_name, contact_number, create_by, create_time, update_by, update_time,id_number from sys_head_teacher
     </sql>
 
     <select id="selectSysHeadTeacherList" parameterType="SysHeadTeacher" resultMap="SysHeadTeacherResult">
@@ -43,7 +44,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+            <if test="idNumber != null">id_number,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="headTeacherName != null">#{headTeacherName},</if>
             <if test="departmentName != null">#{departmentName},</if>
@@ -52,7 +54,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+            <if test="idNumber != null">#{idNumber},</if>
+        </trim>
     </insert>
 
     <update id="updateSysHeadTeacher" parameterType="SysHeadTeacher">
@@ -65,6 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="idNumber != null">id_number = #{idNumber},</if>
         </trim>
         where head_teacher_id = #{headTeacherId}
     </update>

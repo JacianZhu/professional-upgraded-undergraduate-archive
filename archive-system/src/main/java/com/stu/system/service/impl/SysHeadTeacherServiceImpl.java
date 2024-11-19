@@ -2,8 +2,10 @@ package com.stu.system.service.impl;
 
 import java.util.List;
 
+import com.stu.common.core.domain.entity.SysUser;
 import com.stu.common.exception.ServiceException;
 import com.stu.common.utils.DateUtils;
+import com.stu.common.utils.SecurityUtils;
 import com.stu.common.utils.StringUtils;
 import com.stu.common.utils.bean.BeanValidators;
 import com.stu.system.domain.SysAdmissionInfo;
@@ -33,6 +35,8 @@ public class SysHeadTeacherServiceImpl implements ISysHeadTeacherService {
 
     @Autowired
     private SysHeadTeacherMapper sysHeadTeacherMapper;
+    @Autowired
+    private SysUserServiceImpl userService;
 
     /**
      * 查询班主任管理
@@ -65,6 +69,14 @@ public class SysHeadTeacherServiceImpl implements ISysHeadTeacherService {
     @Override
     public int insertSysHeadTeacher(SysHeadTeacher sysHeadTeacher) {
         sysHeadTeacher.setCreateTime(DateUtils.getNowDate());
+        SysUser sysUser = new SysUser();
+        sysUser.setNickName(sysHeadTeacher.getHeadTeacherName());
+        sysUser.setUserName(sysHeadTeacher.getHeadTeacherName());
+        sysUser.setPhonenumber(sysHeadTeacher.getContactNumber());
+        sysUser.setSex("1");
+        sysUser.setPassword(SecurityUtils.encryptPassword(StringUtils.isNotEmpty(sysHeadTeacher.getIdNumber()) ? sysHeadTeacher.getIdNumber() : "123456"));
+        sysUser.setRoleIds(new Long[]{3L});
+        userService.insertUser(sysUser);
         return sysHeadTeacherMapper.insertSysHeadTeacher(sysHeadTeacher);
     }
 
@@ -119,6 +131,14 @@ public class SysHeadTeacherServiceImpl implements ISysHeadTeacherService {
                     BeanValidators.validateWithException(validator, item);
                     item.setCreateBy(operatorName);
                     sysHeadTeacherMapper.insertSysHeadTeacher(item);
+                    SysUser sysUser = new SysUser();
+                    sysUser.setNickName(item.getHeadTeacherName());
+                    sysUser.setUserName(item.getHeadTeacherName());
+                    sysUser.setPhonenumber(item.getContactNumber());
+                    sysUser.setSex("1");
+                    sysUser.setPassword(SecurityUtils.encryptPassword(StringUtils.isNotEmpty(item.getIdNumber()) ? item.getIdNumber() : "123456"));
+                    sysUser.setRoleIds(new Long[]{3L});
+                    userService.insertUser(sysUser);
                     successNum++;
                     successMsg.append("<br/>").append(successNum).append("、编号 ").append(item.getHeadTeacherId()).append(" 导入成功");
                 } else {

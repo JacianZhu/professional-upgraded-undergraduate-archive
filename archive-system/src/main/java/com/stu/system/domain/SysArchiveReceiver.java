@@ -35,7 +35,18 @@ public class SysArchiveReceiver extends BaseEntity
     @Excel(name = "邮寄地址")
     private String mailingAddress;
 
-    public void setReceiverId(Long receiverId) 
+    @Excel(name = "接收人身份证号")
+    private String idNumber;
+
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
+    }
+
+    public void setReceiverId(Long receiverId)
     {
         this.receiverId = receiverId;
     }

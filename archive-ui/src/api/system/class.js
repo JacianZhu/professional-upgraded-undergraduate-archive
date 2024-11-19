@@ -50,7 +50,14 @@ export function getSpecialtyList() {
 }
 export function getHeadTeacherList () {
   return request({
-    url: '/system/class/getHeadTeacherList ',
+    url: '/system/class/getHeadTeacherList',
+    method: 'get'
+  })
+}
+
+export function getSchoolList () {
+  return request({
+    url: '/system/class/getSchoolList',
     method: 'get'
   })
 }

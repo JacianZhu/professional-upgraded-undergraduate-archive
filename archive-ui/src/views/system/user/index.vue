@@ -152,7 +152,9 @@
           <!--          <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />-->
           <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber"
                            v-if="columns[4].visible" width="120"/>
-          <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
+          <el-table-column label="身份证号码" align="center" key="idNumber" prop="idNumber"
+                           v-if="columns[5].visible" width="120"/>
+          <el-table-column label="状态" align="center" key="status" v-if="columns[6].visible">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"
@@ -162,7 +164,7 @@
               ></el-switch>
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[6].visible" width="160">
+          <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[7].visible" width="160">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
@@ -238,8 +240,13 @@
               </el-select>
             </el-form-item>
 
-          </el-col>
 
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="身份证号码" prop="idNumber">
+              <el-input v-model="form.idNumber" placeholder="请输入身份证号码" maxlength="30"/>
+            </el-form-item>
+          </el-col>
           <!--          <el-col :span="12">-->
           <!--            <el-form-item label="归属部门" prop="deptId">-->
           <!--              <treeselect v-model="form.deptId" :options="deptOptions" :show-count="true" placeholder="请选择归属部门" />-->
@@ -452,8 +459,9 @@ export default {
         {key: 2, label: `用户昵称`, visible: true},
         {key: 3, label: `部门`, visible: false},
         {key: 4, label: `手机号码`, visible: true},
-        {key: 5, label: `状态`, visible: true},
-        {key: 6, label: `创建时间`, visible: true}
+        {key: 5, label: `身份证号码`, visible: true},
+        {key: 6, label: `状态`, visible: true},
+        {key: 7, label: `创建时间`, visible: true}
       ],
       // 表单校验
       rules: {
@@ -551,6 +559,7 @@ export default {
         nickName: undefined,
         password: undefined,
         phonenumber: undefined,
+        idNumber: undefined,
         email: undefined,
         sex: undefined,
         status: "0",

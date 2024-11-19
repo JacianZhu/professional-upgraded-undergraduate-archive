@@ -31,6 +31,17 @@ public class SysHeadTeacher extends BaseEntity
     @Excel(name = "联系电话")
     private String contactNumber;
 
+    @Excel(name = "班主任身份证号")
+    private String idNumber;
+
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
+    }
+
     public void setHeadTeacherId(Long headTeacherId) 
     {
         this.headTeacherId = headTeacherId;

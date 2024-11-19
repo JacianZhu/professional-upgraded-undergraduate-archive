@@ -4,6 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.stu.system.domain.SysAdmissionInfo;
+import com.stu.system.service.impl.SysUserServiceImpl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class SysArchiveReceiverController extends BaseController {
     @Autowired
     private ISysArchiveReceiverService sysArchiveReceiverService;
+
+
+
 
     /**
      * 查询档案接收人管理列表

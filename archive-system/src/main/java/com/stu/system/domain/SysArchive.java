@@ -47,11 +47,11 @@ public class SysArchive extends BaseEntity
     private String graduationMajor;
 
     /** 接收方式（邮寄或自带） */
-    @Excel(name = "接收方式", readConverterExp = "邮=寄或自带")
+    @Excel(name = "接收方式")
     private String receiveMethod;
 
     /** 邮寄单号（仅邮寄方式有效） */
-    @Excel(name = "邮寄单号", readConverterExp = "仅=邮寄方式有效")
+    @Excel(name = "邮寄单号")
     private String trackingNumber;
 
     /** 接收日期 */
@@ -60,19 +60,19 @@ public class SysArchive extends BaseEntity
     private Date receiveDate;
 
     /** 邮寄人（仅邮寄方式有效） */
-    @Excel(name = "邮寄人", readConverterExp = "仅=邮寄方式有效")
+    @Excel(name = "邮寄人")
     private String sender;
 
     /** 是否移交班主任（仅自带方式有效） */
-    @Excel(name = "是否移交班主任", readConverterExp = "仅=自带方式有效")
+    @Excel(name = "是否移交班主任")
     private String handedToTeacher;
 
     /** 是否拆封（仅自带方式有效） */
-    @Excel(name = "是否拆封", readConverterExp = "仅=自带方式有效")
+    @Excel(name = "是否拆封")
     private String opened;
 
     /** 移交方式（自提或邮寄） */
-    @Excel(name = "移交方式", readConverterExp = "自=提或邮寄")
+    @Excel(name = "移交方式")
     private String transferMethod;
 
     /** 移交日期 */
@@ -81,19 +81,19 @@ public class SysArchive extends BaseEntity
     private Date transferDate;
 
     /** 移交人（仅自提方式有效） */
-    @Excel(name = "移交人", readConverterExp = "仅=自提方式有效")
+    @Excel(name = "移交人")
     private String transferPerson;
 
     /** 档案接收人（仅邮寄方式有效） */
-    @Excel(name = "档案接收人", readConverterExp = "仅=邮寄方式有效")
+    @Excel(name = "档案接收人")
     private String recipient;
 
     /** 联系电话（仅邮寄方式有效） */
-    @Excel(name = "联系电话", readConverterExp = "仅=邮寄方式有效")
+    @Excel(name = "联系电话")
     private String contactPhone;
 
     /** 邮寄地址（仅邮寄方式有效） */
-    @Excel(name = "邮寄地址", readConverterExp = "仅=邮寄方式有效")
+    @Excel(name = "邮寄地址")
     private String mailingAddress;
 
     /** 档案是否完整 */

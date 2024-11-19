@@ -36,6 +36,9 @@ public class SysAdmissionInfoServiceImpl implements ISysAdmissionInfoService {
     @Autowired
     protected Validator validator;
 
+    @Autowired
+    private SysUserServiceImpl userService;
+
     /**
      * 查询录取信息导入
      *
@@ -67,6 +70,14 @@ public class SysAdmissionInfoServiceImpl implements ISysAdmissionInfoService {
     @Override
     public int insertSysAdmissionInfo(SysAdmissionInfo sysAdmissionInfo) {
         sysAdmissionInfo.setCreateTime(DateUtils.getNowDate());
+        SysUser sysUser = new SysUser();
+        sysUser.setNickName(sysAdmissionInfo.getStudentName());
+        sysUser.setUserName(sysAdmissionInfo.getStudentName());
+        sysUser.setPhonenumber(sysAdmissionInfo.getContactNumber());
+        sysUser.setSex("男".equals(sysAdmissionInfo.getGender()) ? "1" : "0");
+        sysUser.setPassword(SecurityUtils.encryptPassword(StringUtils.isNotEmpty(sysAdmissionInfo.getIdNumber()) ? sysAdmissionInfo.getIdNumber() : "123456"));
+        sysUser.setRoleIds(new Long[]{2L});
+        userService.insertUser(sysUser);
         return sysAdmissionInfoMapper.insertSysAdmissionInfo(sysAdmissionInfo);
     }
 
@@ -121,6 +132,14 @@ public class SysAdmissionInfoServiceImpl implements ISysAdmissionInfoService {
                     BeanValidators.validateWithException(validator, item);
                     item.setCreateBy(operatorName);
                     sysAdmissionInfoMapper.insertSysAdmissionInfo(item);
+                    SysUser sysUser = new SysUser();
+                    sysUser.setNickName(item.getStudentName());
+                    sysUser.setUserName(item.getStudentName());
+                    sysUser.setPhonenumber(item.getContactNumber());
+                    sysUser.setSex("男".equals(item.getGender()) ? "1" : "0");
+                    sysUser.setPassword(SecurityUtils.encryptPassword(StringUtils.isNotEmpty(item.getIdNumber()) ? item.getIdNumber() : "123456"));
+                    sysUser.setRoleIds(new Long[]{2L});
+                    userService.insertUser(sysUser);
                     successNum++;
                     successMsg.append("<br/>").append(successNum).append("、编号 ").append(item.getAdmissionId()).append(" 导入成功");
                 } else {

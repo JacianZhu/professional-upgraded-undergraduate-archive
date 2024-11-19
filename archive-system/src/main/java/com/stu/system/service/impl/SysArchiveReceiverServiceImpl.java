@@ -2,8 +2,10 @@ package com.stu.system.service.impl;
 
 import java.util.List;
 
+import com.stu.common.core.domain.entity.SysUser;
 import com.stu.common.exception.ServiceException;
 import com.stu.common.utils.DateUtils;
+import com.stu.common.utils.SecurityUtils;
 import com.stu.common.utils.StringUtils;
 import com.stu.common.utils.bean.BeanValidators;
 import com.stu.system.domain.SysAdmissionInfo;
@@ -33,6 +35,8 @@ public class SysArchiveReceiverServiceImpl implements ISysArchiveReceiverService
 
     @Autowired
     protected Validator validator;
+    @Autowired
+    private SysUserServiceImpl userService;
 
     /**
      * 查询档案接收人管理
@@ -65,6 +69,14 @@ public class SysArchiveReceiverServiceImpl implements ISysArchiveReceiverService
     @Override
     public int insertSysArchiveReceiver(SysArchiveReceiver sysArchiveReceiver) {
         sysArchiveReceiver.setCreateTime(DateUtils.getNowDate());
+        SysUser sysUser = new SysUser();
+        sysUser.setNickName(sysArchiveReceiver.getReceiverName());
+        sysUser.setUserName(sysArchiveReceiver.getReceiverName());
+        sysUser.setPhonenumber(sysArchiveReceiver.getContactNumber());
+        sysUser.setSex("1");
+        sysUser.setPassword(SecurityUtils.encryptPassword(StringUtils.isNotEmpty(sysArchiveReceiver.getIdNumber()) ? sysArchiveReceiver.getIdNumber() : "123456"));
+        sysUser.setRoleIds(new Long[]{4L});
+        userService.insertUser(sysUser);
         return sysArchiveReceiverMapper.insertSysArchiveReceiver(sysArchiveReceiver);
     }
 
@@ -119,6 +131,14 @@ public class SysArchiveReceiverServiceImpl implements ISysArchiveReceiverService
                     BeanValidators.validateWithException(validator, item);
                     item.setCreateBy(operatorName);
                     sysArchiveReceiverMapper.insertSysArchiveReceiver(item);
+                    SysUser sysUser = new SysUser();
+                    sysUser.setNickName(item.getReceiverName());
+                    sysUser.setUserName(item.getReceiverName());
+                    sysUser.setPhonenumber(item.getContactNumber());
+                    sysUser.setSex("1");
+                    sysUser.setPassword(SecurityUtils.encryptPassword(StringUtils.isNotEmpty(item.getIdNumber()) ? item.getIdNumber() : "123456"));
+                    sysUser.setRoleIds(new Long[]{4L});
+                    userService.insertUser(sysUser);
                     successNum++;
                     successMsg.append("<br/>").append(successNum).append("、编号 ").append(item.getReceiverId()).append(" 导入成功");
                 } else {

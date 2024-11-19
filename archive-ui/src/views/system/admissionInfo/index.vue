@@ -179,10 +179,24 @@
           <el-input v-model="form.studentId" placeholder="请输入学号" />
         </el-form-item>
         <el-form-item label="毕业院校" prop="graduateSchool">
-          <el-input v-model="form.graduateSchool" placeholder="请输入毕业院校" />
+          <el-select v-model="form.graduateSchool" placeholder="请选择毕业院校">
+            <el-option
+              v-for="school in schoolList"
+              :key="school.id"
+              :label="school.graduateSchoolName"
+              :value="school.graduateSchoolName"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="专科专业" prop="diplomaSpecialty">
-          <el-input v-model="form.diplomaSpecialty" placeholder="请输入专科专业" />
+          <el-select v-model="form.diplomaSpecialty" placeholder="请选择专科专业">
+            <el-option
+              v-for="specialty in specialtyList"
+              :key="specialty.id"
+              :label="specialty.specialtyName"
+              :value="specialty.specialtyName"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="毕业时间" prop="graduationDate">
           <el-date-picker clearable
@@ -196,7 +210,14 @@
           <el-input v-model="form.admittedUniversity" placeholder="请输入录取本科院校" />
         </el-form-item>
         <el-form-item label="本科专业" prop="admittedSpecialty">
-          <el-input v-model="form.admittedSpecialty" placeholder="请输入本科专业" />
+          <el-select v-model="form.admittedSpecialty" placeholder="请选择本科专业">
+            <el-option
+              v-for="specialty in specialtyList"
+              :key="specialty.id"
+              :label="specialty.specialtyName"
+              :value="specialty.specialtyName"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="录取批次" prop="admissionBatch">
           <el-input v-model="form.admissionBatch" placeholder="请输入录取批次" />
@@ -271,6 +292,7 @@
 </template>
 
 <script>
+import {getSpecialtyList, getSchoolList} from "@/api/system/class";
 import { listAdmissionInfo, getAdmissionInfo, delAdmissionInfo, addAdmissionInfo, updateAdmissionInfo } from "@/api/system/admissionInfo";
 import {getToken} from "@/utils/auth";
 import ImportFile from "@/views/components/ImportFile.vue";
@@ -325,7 +347,9 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      schoolList: [],
+      specialtyList: [],
     };
   },
   computed: {
@@ -360,9 +384,20 @@ export default {
   },
   created() {
     this.getList();
+    this.fetchSchoolList();
+    this.fetchSpecialtyList();
   },
   methods: {
-
+    fetchSchoolList() {
+      getSchoolList().then(response => {
+        this.schoolList = response.data;
+      });
+    },
+    fetchSpecialtyList() {
+      getSpecialtyList().then(response => {
+        this.specialtyList = response.data;
+      });
+    },
     /** 导入按钮操作 */
     handleImport() {
       this.upload.title = "用户导入";
