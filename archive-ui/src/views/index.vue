@@ -11,36 +11,27 @@
       <el-col :span="15">
         <el-row>
           <el-col :span="24">
-            <panel-group @handleSetLineChartData="handleSetLineChartData" :headerStaticData="headerStaticData"/>
+            <panel-group @handleSetLineChartData="handleSetLineChartData" :headerStaticData="headerStaticData" />
           </el-col>
           <el-col :span="24">
-            <el-table size="mini" v-loading="loading"
-                      height="275px"
-                      :data="noticeList"
-                      header-row-class-name="header_color"
-                      :header-row-style="{backgroundColor: '#42b983'}"
-            >
-              <el-table-column label="序号" align="center" prop="noticeId" width="100"/>
-              <el-table-column
-                label="公告标题"
-                align="center"
-                prop="noticeTitle"
-                :show-overflow-tooltip="true"
-              >
+            <el-table size="mini" v-loading="loading" height="275px" :data="noticeList"
+              header-row-class-name="header_color" :header-row-style="{ backgroundColor: '#42b983' }">
+              <el-table-column label="序号" align="center" prop="noticeId" width="100" />
+              <el-table-column label="公告标题" align="center" prop="noticeTitle" :show-overflow-tooltip="true">
 
                 <template #default="{ row }">
                   <!-- 检查 noticeTitle 是否是链接 -->
-                  <span v-if="row.noticeType=='3'">
-      <!-- 如果是链接，显示为 a 标签并添加跳转 -->
-              <el-link type="primary">
+                  <span v-if="row.noticeType == '3'">
+                    <!-- 如果是链接，显示为 a 标签并添加跳转 -->
+                    <el-link type="primary">
 
-      <a :href="extractUrls (row.noticeContent)" target="_blank">{{ row.noticeTitle }}</a>
-              </el-link>
-    </span>
+                      <a :href="extractUrls(row.noticeContent)" target="_blank">{{ row.noticeTitle }}</a>
+                    </el-link>
+                  </span>
                   <span v-else>
-      <!-- 否则显示普通文本 -->
-      {{ row.noticeTitle }}
-    </span>
+                    <!-- 否则显示普通文本 -->
+                    {{ row.noticeTitle }}
+                  </span>
                 </template>
               </el-table-column>
 
@@ -48,13 +39,8 @@
 
             <pagination
               style="position: relative; margin-top: 0;height: 40px;line-height: 40px;display: flex;justify-content: center;align-items: center"
-              small
-              v-show="total>0"
-              :total="total"
-              :page.sync="queryParams.pageNum"
-              :limit.sync="queryParams.pageSize"
-              @pagination="initData"
-            />
+              small v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+              @pagination="initData" />
           </el-col>
 
         </el-row>
@@ -81,7 +67,7 @@
       <el-col :xs="24" :sm="24" :lg="12">
         <router-link to="/dataImport/admissionInfo">
           <div class="chart-wrapper">
-            <line-chart :chart-data="pie_char"/>
+            <line-chart :chart-data="pie_char" />
 
           </div>
         </router-link>
@@ -103,9 +89,9 @@ import LineChart from './dashboard/LineChart'
 import RaddarChart from './dashboard/RaddarChart'
 import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
-import {getStatisticData, statisticsAdmissionSchool, statisticsMajor} from "@/api/dashboard";
+import { getStatisticData, statisticsAdmissionSchool, statisticsMajor } from "@/api/dashboard";
 import PersonalInfo from "@/views/dashboard/personalInfo.vue";
-import {listNotice} from "@/api/system/notice";
+import { listNotice } from "@/api/system/notice";
 import Zhuzhuangtu from "@/views/dashboard/zhuzhuangtu.vue";
 
 const lineChartData = {
@@ -139,6 +125,7 @@ export default {
     BarChart
   },
   created() {
+
     this.init()
     this.initData()
   },
@@ -162,7 +149,7 @@ export default {
       headerStaticData: {},
       line_char_data: {},
       raddar_chart: null,
-      pie_char: {}
+      pie_char: {},
     }
   },
   methods: {
