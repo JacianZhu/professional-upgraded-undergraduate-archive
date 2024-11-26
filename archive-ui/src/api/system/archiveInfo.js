@@ -65,3 +65,10 @@ export function updateTeacherReceiveFlag(username) {
   })
 }
 
+
+export function getTeacherReceiveFlag(username) {
+  return request({
+    url: '/system/archiveInfo/getTeacherReceiveFlag?username=' + username,
+    method: 'get',
+  })
+}

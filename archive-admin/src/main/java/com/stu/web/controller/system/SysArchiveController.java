@@ -1,12 +1,12 @@
 package com.stu.web.controller.system;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletResponse;
 
-import com.stu.common.core.domain.entity.SysUser;
 import com.stu.common.core.domain.model.LoginUser;
 import com.stu.common.utils.SecurityUtils;
-import com.stu.system.domain.SysAdmissionInfo;
+import com.stu.common.utils.StringUtils;
 import com.stu.system.domain.SysArchiveReceiver;
 import com.stu.system.domain.SysHeadTeacher;
 import com.stu.system.service.ISysArchiveReceiverService;
@@ -54,7 +54,7 @@ public class SysArchiveController extends BaseController {
     public TableDataInfo list(SysArchive sysArchive) {
         startPage();
         LoginUser loginUser = SecurityUtils.getLoginUser();
-        if(loginUser.getUser().getRoles().get(0).getRoleId()==3){
+        if (loginUser.getUser().getRoles().get(0).getRoleId() == 3) {
             sysArchive.setTeacherReceiveFlag("1");
             sysArchive.setRecipient(loginUser.getUsername());
         }
@@ -145,14 +145,30 @@ public class SysArchiveController extends BaseController {
     @GetMapping(value = "/updateTeacherReceiveFlag")
     public AjaxResult updateTeacherReceiveFlag(@RequestParam("username") String username) {
         List<SysArchive> list = sysArchiveService.selectSysArchiveList(new SysArchive());
-        list.forEach(item->{
-            if(username.equals(item.getRecipient())){
+        list.forEach(item -> {
+            if (username.equals(item.getRecipient())) {
                 item.setTeacherReceiveFlag("1");
             }
             sysArchiveService.updateSysArchive(item);
         });
 
         return success();
+    }
+
+    @GetMapping(value = "/getTeacherReceiveFlag")
+    public AjaxResult getTeacherReceiveFlag(@RequestParam("username") String username) {
+        List<SysArchive> list = sysArchiveService.selectSysArchiveList(new SysArchive());
+
+        if (list == null || list.isEmpty()) {
+            return success(0);
+        }
+
+        long count = list.stream()
+                .filter(item -> username.equals(item.getRecipient()))
+                .filter(item -> StringUtils.isNull(item.getTeacherReceiveFlag()) || "0".equals(item.getTeacherReceiveFlag()))
+                .count();
+
+        return success(count);
     }
 
 }

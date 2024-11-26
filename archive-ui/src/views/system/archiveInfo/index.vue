@@ -51,6 +51,11 @@
           @click="handleReceive"
         >接收
         </el-button>
+        <el-badge :value="pendingArchivesCount" class="ml-2">
+          <el-tooltip content="待接收档案数量" placement="top">
+            <span class="el-icon-info"></span>
+          </el-tooltip>
+        </el-badge>
       </el-col>
     </el-row>
     <el-row :gutter="10" class="mb8">
@@ -371,7 +376,8 @@ import {
   updateArchiveInfo,
   getAllHeadteacher,
   getAllReceiveList,
-  updateTeacherReceiveFlag
+  updateTeacherReceiveFlag,
+  getTeacherReceiveFlag
 } from "@/api/system/archiveInfo";
 import ImportFile from "@/views/components/ImportFile.vue";
 import {getAllClasses} from "@/api/system/admissionInfo";
@@ -431,6 +437,7 @@ export default {
       // 表单校验
       rules: {},
       classList: [],
+      pendingArchivesCount: 0 // 新增变量，用于存储待接收档案数量
     };
   },
   computed: {
@@ -474,13 +481,22 @@ export default {
     this.fetchClassList();
     this.fetchReceiveList();
     this.fetchHeadteacherList();
+    this.fetchPendingArchivesCount();
   },
 
   methods: {
+    fetchPendingArchivesCount() {
+      getTeacherReceiveFlag(this.$store.state.user.name).then(response => {
+        this.pendingArchivesCount = response.data;
+      }).catch(error => {
+        this.$modal.msgError("获取待接收档案数量失败");
+      });
+    },
     handleReceive() {
       updateTeacherReceiveFlag(this.$store.state.user.name).then(response => {
           this.$modal.msgSuccess("接收成功");
           this.getList();
+        this.fetchPendingArchivesCount(); // 更新待接收档案数量
       }).catch(error => {
         this.$modal.msgError("接收失败");
       });
