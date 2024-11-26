@@ -82,7 +82,12 @@ export default {
           data: name,
           axisTick: {
             alignWithLabel: true
+          },
+          axisLabel: {
+            show: false // 隐藏x轴标签
           }
+
+
         }],
         yAxis: [{
           type: 'value',

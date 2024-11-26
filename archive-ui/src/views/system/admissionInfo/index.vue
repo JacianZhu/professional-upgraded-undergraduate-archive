@@ -1,36 +1,41 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="学生姓名" prop="studentName">
+      <el-form-item label="年份" prop="year">
+        <el-input
+          v-model="queryParams.year"
+          placeholder="请输入年份"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="专业" prop="admittedSpecialty">
+        <el-select v-model="queryParams.admittedSpecialty" placeholder="请选择专业" clearable>
+          <el-option
+            v-for="specialty in specialtyList"
+            :key="specialty.id"
+            :label="specialty.specialtyName"
+            :value="specialty.specialtyName"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="班级" prop="className">
+        <el-select v-model="queryParams.className" placeholder="请选择班级" clearable>
+          <el-option
+            v-for="classItem in classList"
+            :key="classItem.id"
+            :label="classItem.className"
+            :value="classItem.className"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="姓名" prop="studentName">
         <el-input
           v-model="queryParams.studentName"
-          placeholder="请输入学生姓名"
+          placeholder="请输入姓名"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="身份证号" prop="idNumber">
-        <el-input
-          v-model="queryParams.idNumber"
-          placeholder="请输入身份证号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="学号" prop="studentId">
-        <el-input
-          v-model="queryParams.studentId"
-          placeholder="请输入学号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="录取状态" prop="admissionStatus">
-        <el-select v-model="queryParams.admissionStatus" placeholder="请选择录取状态" clearable>
-          <el-option label="已录取" value="已录取"></el-option>
-          <el-option label="待录取" value="待录取"></el-option>
-          <el-option label="未录取" value="未录取"></el-option>
-        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -127,7 +132,7 @@
               <span>{{ parseTime(scope.row.admissionDate, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="录取状态" align="center" prop="admissionStatus" />
+          <el-table-column label="班级" align="center" prop="className" />
           <el-table-column label="联系电话" align="center" prop="contactNumber" />
           <el-table-column label="联系地址" align="center" prop="contactAddress" />
           <el-table-column label="录取类型" align="center" prop="admissionType" />
@@ -185,6 +190,16 @@
               :key="school.id"
               :label="school.graduateSchoolName"
               :value="school.graduateSchoolName"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="班级" prop="className">
+          <el-select v-model="form.className" placeholder="请选择班级">
+            <el-option
+              v-for="classItem in classList"
+              :key="classItem.id"
+              :label="classItem.className"
+              :value="classItem.className"
             />
           </el-select>
         </el-form-item>
@@ -293,7 +308,7 @@
 
 <script>
 import {getSpecialtyList, getSchoolList} from "@/api/system/class";
-import { listAdmissionInfo, getAdmissionInfo, delAdmissionInfo, addAdmissionInfo, updateAdmissionInfo } from "@/api/system/admissionInfo";
+import { listAdmissionInfo, getAdmissionInfo, delAdmissionInfo, addAdmissionInfo, updateAdmissionInfo ,getAllClasses} from "@/api/system/admissionInfo";
 import {getToken} from "@/utils/auth";
 import ImportFile from "@/views/components/ImportFile.vue";
 export default {
@@ -350,6 +365,7 @@ export default {
       },
       schoolList: [],
       specialtyList: [],
+      classList: [],
     };
   },
   computed: {
@@ -384,8 +400,14 @@ export default {
     this.getList();
     this.fetchSchoolList();
     this.fetchSpecialtyList();
+    this.fetchClassList();
   },
   methods: {
+    fetchClassList() {
+      getAllClasses().then(response => {
+        this.classList = response.data;
+      });
+    },
     fetchSchoolList() {
       getSchoolList().then(response => {
         this.schoolList = response.data;

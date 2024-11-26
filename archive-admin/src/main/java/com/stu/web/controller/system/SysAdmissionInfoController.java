@@ -4,6 +4,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.stu.common.core.domain.entity.SysUser;
+import com.stu.system.domain.SysClass;
+import com.stu.system.service.ISysClassService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +37,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class SysAdmissionInfoController extends BaseController {
     @Autowired
     private ISysAdmissionInfoService sysAdmissionInfoService;
+
+    @Autowired
+    private ISysClassService sysClassService;
 
     /**
      * 查询录取信息导入列表
@@ -108,4 +113,10 @@ public class SysAdmissionInfoController extends BaseController {
     public AjaxResult remove(@PathVariable Long[] admissionIds) {
         return toAjax(sysAdmissionInfoService.deleteSysAdmissionInfoByAdmissionIds(admissionIds));
     }
+
+    @GetMapping(value = "/getAllClasses")
+    public AjaxResult getAllClasses() {
+        return success(sysClassService.selectSysClassList(new SysClass()));
+    }
+
 }

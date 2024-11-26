@@ -1,5 +1,7 @@
 package com.stu.system.service.impl;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 import com.stu.common.core.domain.entity.SysUser;
@@ -70,6 +72,10 @@ public class SysAdmissionInfoServiceImpl implements ISysAdmissionInfoService {
     @Override
     public int insertSysAdmissionInfo(SysAdmissionInfo sysAdmissionInfo) {
         sysAdmissionInfo.setCreateTime(DateUtils.getNowDate());
+        if (StringUtils.isNotNull(sysAdmissionInfo.getAdmissionDate())) {
+            LocalDate localDate = sysAdmissionInfo.getAdmissionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            sysAdmissionInfo.setYear(String.valueOf(localDate.getYear()));
+        }
         SysUser sysUser = new SysUser();
         sysUser.setNickName(sysAdmissionInfo.getStudentName());
         sysUser.setUserName(sysAdmissionInfo.getStudentName());
@@ -90,6 +96,10 @@ public class SysAdmissionInfoServiceImpl implements ISysAdmissionInfoService {
     @Override
     public int updateSysAdmissionInfo(SysAdmissionInfo sysAdmissionInfo) {
         sysAdmissionInfo.setUpdateTime(DateUtils.getNowDate());
+        if (StringUtils.isNotNull(sysAdmissionInfo.getAdmissionDate())) {
+            LocalDate localDate = sysAdmissionInfo.getAdmissionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            sysAdmissionInfo.setYear(String.valueOf(localDate.getYear()));
+        }
         return sysAdmissionInfoMapper.updateSysAdmissionInfo(sysAdmissionInfo);
     }
 
@@ -131,6 +141,10 @@ public class SysAdmissionInfoServiceImpl implements ISysAdmissionInfoService {
                 if (StringUtils.isNull(u)) {
                     BeanValidators.validateWithException(validator, item);
                     item.setCreateBy(operatorName);
+                    if (StringUtils.isNotNull(item.getAdmissionDate())) {
+                        LocalDate localDate = item.getAdmissionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                        item.setYear(String.valueOf(localDate.getYear()));
+                    }
                     sysAdmissionInfoMapper.insertSysAdmissionInfo(item);
                     SysUser sysUser = new SysUser();
                     sysUser.setNickName(item.getStudentName());
@@ -146,6 +160,10 @@ public class SysAdmissionInfoServiceImpl implements ISysAdmissionInfoService {
                     BeanValidators.validateWithException(validator, item);
                     item.setAdmissionId(u.getAdmissionId());
                     item.setUpdateBy(operatorName);
+                    if (StringUtils.isNotNull(item.getAdmissionDate())) {
+                        LocalDate localDate = item.getAdmissionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                        item.setYear(String.valueOf(localDate.getYear()));
+                    }
                     sysAdmissionInfoMapper.updateSysAdmissionInfo(item);
                     successNum++;
                     successMsg.append("<br/>").append(successNum).append("、编号 ").append(item.getAdmissionId()).append(" 更新成功");

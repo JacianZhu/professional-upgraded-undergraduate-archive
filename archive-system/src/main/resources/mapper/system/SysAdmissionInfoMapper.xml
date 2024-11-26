@@ -29,10 +29,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="className"    column="class_name"    />
+        <result property="year"    column="year"    />
     </resultMap>
 
     <sql id="selectSysAdmissionInfoVo">
-        select admission_id, student_name, id_number, student_id, gender, graduate_school, diploma_specialty, graduation_date, admitted_university, admitted_specialty, admission_batch, admission_date, admission_status, contact_number, contact_address, admission_type, candidate_type, exam_ticket_number, exam_score, remarks, create_by, create_time, update_by, update_time from sys_admission_info
+        select admission_id, student_name, id_number, student_id, gender, graduate_school, diploma_specialty, graduation_date, admitted_university, admitted_specialty, admission_batch, admission_date, admission_status, contact_number, contact_address, admission_type, candidate_type, exam_ticket_number, exam_score, remarks, create_by, create_time, update_by, update_time,class_name,year from sys_admission_info
     </sql>
 
     <select id="selectSysAdmissionInfoList" parameterType="SysAdmissionInfo" resultMap="SysAdmissionInfoResult">
@@ -42,6 +44,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="idNumber != null  and idNumber != ''"> and id_number = #{idNumber}</if>
             <if test="studentId != null  and studentId != ''"> and student_id = #{studentId}</if>
             <if test="admissionStatus != null  and admissionStatus != ''"> and admission_status = #{admissionStatus}</if>
+            <if test="className != null  and className != ''"> and class_name = #{className}</if>
+            <if test="admittedSpecialty != null  and admittedSpecialty != ''"> and admitted_specialty = #{admittedSpecialty}</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
         </where>
     </select>
     
@@ -76,6 +81,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="className != null">class_name,</if>
+            <if test="year != null">year,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="studentName != null">#{studentName},</if>
@@ -101,6 +108,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="className != null">#{className},</if>
+            <if test="year != null">#{year},</if>
          </trim>
     </insert>
 
@@ -130,6 +139,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="className != null">class_name = #{className},</if>
+            <if test="year != null">year = #{year},</if>
         </trim>
         where admission_id = #{admissionId}
     </update>

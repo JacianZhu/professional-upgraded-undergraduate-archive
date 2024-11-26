@@ -4,7 +4,13 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.stu.common.core.domain.entity.SysUser;
+import com.stu.common.core.domain.model.LoginUser;
+import com.stu.common.utils.SecurityUtils;
 import com.stu.system.domain.SysAdmissionInfo;
+import com.stu.system.domain.SysArchiveReceiver;
+import com.stu.system.domain.SysHeadTeacher;
+import com.stu.system.service.ISysArchiveReceiverService;
+import com.stu.system.service.ISysHeadTeacherService;
 import com.stu.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +40,12 @@ public class SysArchiveController extends BaseController {
     @Autowired
     private ISysUserService sysUserService;
 
+    @Autowired
+    private ISysArchiveReceiverService sysArchiveReceiverService;
+
+    @Autowired
+    private ISysHeadTeacherService sysHeadTeacherService;
+
     /**
      * 查询档案信息列表
      */
@@ -41,6 +53,11 @@ public class SysArchiveController extends BaseController {
     @GetMapping("/list")
     public TableDataInfo list(SysArchive sysArchive) {
         startPage();
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        if(loginUser.getUser().getRoles().get(0).getRoleId()==3){
+            sysArchive.setTeacherReceiveFlag("1");
+            sysArchive.setRecipient(loginUser.getUsername());
+        }
         List<SysArchive> list = sysArchiveService.selectSysArchiveList(sysArchive);
         return getDataTable(list);
     }
@@ -113,4 +130,29 @@ public class SysArchiveController extends BaseController {
         List<SysArchive> list = sysArchiveService.selectSysArchiveList(sysArchive);
         return list.get(0);
     }
+
+
+    @GetMapping(value = "/getAllReceiveList")
+    public AjaxResult getAllReceiveList() {
+        return success(sysArchiveReceiverService.selectSysArchiveReceiverList(new SysArchiveReceiver()));
+    }
+
+    @GetMapping(value = "/getAllHeadTeacherList")
+    public AjaxResult getAllHeadTeacherList() {
+        return success(sysHeadTeacherService.selectSysHeadTeacherList(new SysHeadTeacher()));
+    }
+
+    @GetMapping(value = "/updateTeacherReceiveFlag")
+    public AjaxResult updateTeacherReceiveFlag(@RequestParam("username") String username) {
+        List<SysArchive> list = sysArchiveService.selectSysArchiveList(new SysArchive());
+        list.forEach(item->{
+            if(username.equals(item.getRecipient())){
+                item.setTeacherReceiveFlag("1");
+            }
+            sysArchiveService.updateSysArchive(item);
+        });
+
+        return success();
+    }
+
 }

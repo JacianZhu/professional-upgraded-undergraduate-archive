@@ -30,10 +30,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="archiveStatus"    column="archive_status"    />
+        <result property="className"    column="class_name"    />
+        <result property="year"    column="year"    />
+        <result property="teacherReceiveFlag"    column="teacher_receive_flag"    />
+
     </resultMap>
 
     <sql id="selectSysArchiveVo">
-        select archive_id, student_name, student_gender, student_date_of_birth, student_national_id, graduation_school, graduation_major, receive_method, tracking_number, receive_date, sender, handed_to_teacher, opened, transfer_method, transfer_date, transfer_person, recipient, contact_phone, mailing_address, archive_complete, remarks, create_by, create_time, update_by, archive_status from sys_archive
+        select archive_id, student_name, student_gender, student_date_of_birth, student_national_id, graduation_school, graduation_major, receive_method, tracking_number, receive_date, sender, handed_to_teacher, opened, transfer_method, transfer_date, transfer_person, recipient, contact_phone, mailing_address, archive_complete, remarks, create_by, create_time, update_by, archive_status,class_name,year,teacher_receive_flag from sys_archive
     </sql>
 
     <select id="selectSysArchiveList" parameterType="SysArchive" resultMap="SysArchiveResult">
@@ -42,6 +46,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="studentName != null and studentName != ''">
                 student_name = #{studentName}
             </if>
+            <if test="className != null  and className != ''"> and class_name = #{className}</if>
+            <if test="graduationMajor != null  and graduationMajor != ''"> and graduation_major = #{graduationMajor}</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            <if test="archiveStatus != null  and archiveStatus != ''"> and archive_status = #{archiveStatus}</if>
+            <if test="recipient != null  and recipient != ''"> and recipient = #{recipient}</if>
+            <if test="teacherReceiveFlag != null  and teacherReceiveFlag != ''"> and teacher_receive_flag = #{teacherReceiveFlag}</if>
         </where>
     </select>
     
@@ -77,7 +87,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="archiveStatus != null">archive_status,</if>
-         </trim>
+            <if test="className != null">class_name,</if>
+            <if test="year != null">year,</if>
+            </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="studentName != null">#{studentName},</if>
             <if test="studentGender != null">#{studentGender},</if>
@@ -103,7 +115,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="archiveStatus != null">#{archiveStatus},</if>
-         </trim>
+            <if test="className != null">#{className},</if>
+            <if test="year != null">#{year},</if>
+        </trim>
     </insert>
 
     <update id="updateSysArchive" parameterType="SysArchive">
@@ -133,6 +147,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="archiveStatus != null">archive_status = #{archiveStatus},</if>
+            <if test="className != null">class_name = #{className},</if>
+            <if test="year != null">year = #{year},</if>
+            <if test="teacherReceiveFlag != null">teacher_receive_flag = #{teacherReceiveFlag},</if>
         </trim>
         where archive_id = #{archiveId}
     </update>

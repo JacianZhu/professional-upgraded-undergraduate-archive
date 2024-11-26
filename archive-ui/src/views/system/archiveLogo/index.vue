@@ -39,57 +39,15 @@
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
-                    接收方式
-                </template>
-                {{ list.receiveMethod }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-                <template slot="label">
                     邮寄单号
                 </template>
                 {{ list.trackingNumber }}
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
-                    接收日期
-                </template>
-                {{ list.receiveDate }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-                <template slot="label">
-                    邮寄人
-                </template>
-                {{ list.sender }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-                <template slot="label">
-                    是否移交班主任
+                    是否移交档案接收人
                 </template>
                 {{ list.handedToTeacher }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-                <template slot="label">
-                    是否拆封
-                </template>
-                {{ list.opened }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-                <template slot="label">
-                    移交方式
-                </template>
-                {{ list.transferMethod }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-                <template slot="label">
-                    移交日期
-                </template>
-                {{ list.transferDate }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-                <template slot="label">
-                    移交人
-                </template>
-                {{ list.transferPerson }}
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
@@ -102,12 +60,6 @@
                     联系电话
                 </template>
                 {{ list.contactPhone }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-                <template slot="label">
-                    邮寄地址
-                </template>
-                {{ list.mailingAddress }}
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
@@ -130,13 +82,46 @@
         </el-descriptions>
     </div>
     <div class="app-container" v-else>
-        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch"
-            label-width="68px">
-            <el-form-item>
-                <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-                <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-            </el-form-item>
-        </el-form>
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="年份" prop="year">
+          <el-input
+            v-model="queryParams.year"
+            placeholder="请输入年份"
+            clearable
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="专业" prop="graduationMajor">
+          <el-input
+            v-model="queryParams.graduationMajor"
+            placeholder="请输入专业"
+            clearable
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="班级" prop="className">
+          <el-select v-model="queryParams.className" placeholder="请选择班级" clearable>
+            <el-option
+              v-for="classItem in classList"
+              :key="classItem.id"
+              :label="classItem.className"
+              :value="classItem.className"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="姓名" prop="studentName">
+          <el-input
+            v-model="queryParams.studentName"
+            placeholder="请输入姓名"
+            clearable
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+          <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        </el-form-item>
+      </el-form>
 
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
@@ -245,8 +230,6 @@
         </el-collapse-item>
       </el-collapse>
 
-
-
         <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum"
             :limit.sync="queryParams.pageSize" @pagination="getList" />
 
@@ -267,6 +250,16 @@
                         placeholder="请选择学生出生日期">
                     </el-date-picker>
                 </el-form-item>
+              <el-form-item label="班级" prop="className">
+                <el-select v-model="form.className" placeholder="请选择班级">
+                  <el-option
+                    v-for="classItem in classList"
+                    :key="classItem.id"
+                    :label="classItem.className"
+                    :value="classItem.className"
+                  />
+                </el-select>
+              </el-form-item>
                 <el-form-item label="学生身份证号" prop="studentNationalId">
                     <el-input v-model="form.studentNationalId" placeholder="请输入学生身份证号" />
                 </el-form-item>
@@ -391,57 +384,15 @@
                 </el-descriptions-item>
                 <el-descriptions-item>
                     <template slot="label">
-                        接收方式
-                    </template>
-                    {{ record.item.receiveMethod }}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template slot="label">
                         邮寄单号
                     </template>
                     {{ record.item.trackingNumber }}
                 </el-descriptions-item>
                 <el-descriptions-item>
                     <template slot="label">
-                        接收日期
-                    </template>
-                    {{ record.item.receiveDate }}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template slot="label">
-                        邮寄人
-                    </template>
-                    {{ record.item.sender }}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template slot="label">
-                        是否移交班主任
+                        是否移交档案接收人
                     </template>
                     {{ record.item.handedToTeacher }}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template slot="label">
-                        是否拆封
-                    </template>
-                    {{ record.item.opened }}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template slot="label">
-                        移交方式
-                    </template>
-                    {{ record.item.transferMethod }}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template slot="label">
-                        移交日期
-                    </template>
-                    {{ record.item.transferDate }}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template slot="label">
-                        移交人
-                    </template>
-                    {{ record.item.transferPerson }}
                 </el-descriptions-item>
                 <el-descriptions-item>
                     <template slot="label">
@@ -457,22 +408,16 @@
                 </el-descriptions-item>
                 <el-descriptions-item>
                     <template slot="label">
-                        邮寄地址
-                    </template>
-                    {{ record.item.mailingAddress }}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template slot="label">
                         档案是否完整
                     </template>
                     {{ record.item.archiveComplete }}
                 </el-descriptions-item>
-                <!-- <el-descriptions-item>
+                <el-descriptions-item>
                     <template slot="label">
                         备注
                     </template>
                     {{ record.item.remarks }}
-                </el-descriptions-item> -->
+                </el-descriptions-item>
                 <el-descriptions-item>
                     <template slot="label">
                         档案状态
@@ -487,6 +432,7 @@
 <script>
 import { selectSysArchiveByName } from "@/api/system/archiveLogo"
 import { listArchiveInfo, getArchiveInfo, delArchiveInfo, addArchiveInfo, updateArchiveInfo } from "@/api/system/archiveInfo";
+import {getAllClasses} from "@/api/system/admissionInfo";
 export default {
     name: "ArchiveLogo",
     dicts: ['sys_receive_type', 'sys_yes_no', 'sys_archive_status', 'sys_user_sex', 'sys_transfer_type'],
@@ -528,13 +474,14 @@ export default {
                 title: '个人档案',
                 open: false,
                 item:{}
-            }
+            },
+          classList: [],
         };
     },
   computed: {
     groupedData() {
       return this.archiveInfoList.reduce((acc, item) => {
-        const year = new Date(item.studentDateOfBirth).getFullYear();
+        const year = new Date(item.receiveDate).getFullYear();
         const specialty = item.graduationMajor || '未分类';
         const key = `${year} ${specialty}`;
         if (!acc[key]) {
@@ -565,9 +512,15 @@ export default {
         this.addSelectSysArchiveByName();
       }
       this.getList();
+      this.fetchClassList();
     },
 
     methods: {
+      fetchClassList() {
+        getAllClasses().then(response => {
+          this.classList = response.data;
+        });
+      },
         // 获取单个档案
         addSelectSysArchiveByName() {
             let username = this.$store.state.user.name;
@@ -626,6 +579,7 @@ export default {
         handleQuery() {
             this.queryParams.pageNum = 1;
             this.getList();
+
         },
         /** 重置按钮操作 */
         resetQuery() {

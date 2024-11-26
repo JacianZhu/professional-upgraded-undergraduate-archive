@@ -152,6 +152,37 @@ public class SysArchive extends BaseEntity {
     @Excel(name = "档案状态")
     private String archiveStatus;
 
+    @Excel(name = "班级名称")
+    private String className;
+
+    private String year;
+
+    private String teacherReceiveFlag;
+
+    public String getTeacherReceiveFlag() {
+        return teacherReceiveFlag;
+    }
+
+    public void setTeacherReceiveFlag(String teacherReceiveFlag) {
+        this.teacherReceiveFlag = teacherReceiveFlag;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
     public void setArchiveId(Long archiveId) {
         this.archiveId = archiveId;
     }

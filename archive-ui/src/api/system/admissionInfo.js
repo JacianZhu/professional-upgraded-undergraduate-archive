@@ -42,3 +42,10 @@ export function delAdmissionInfo(admissionId) {
     method: 'delete'
   })
 }
+
+export function getAllClasses() {
+  return request({
+    url: '/system/admissionInfo/getAllClasses',
+    method: 'get'
+  })
+}

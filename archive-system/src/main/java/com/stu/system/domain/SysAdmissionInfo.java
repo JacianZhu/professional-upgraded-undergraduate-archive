@@ -96,11 +96,32 @@ public class SysAdmissionInfo extends BaseEntity
     @Excel(name = "成绩")
     private BigDecimal examScore;
 
+    @Excel(name = "班级名称")
+    private String className;
+
+    private String year;
+
     /** 备注 */
     @Excel(name = "备注")
     private String remarks;
 
-    public void setAdmissionId(Long admissionId) 
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public void setAdmissionId(Long admissionId)
     {
         this.admissionId = admissionId;
     }

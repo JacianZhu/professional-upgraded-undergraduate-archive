@@ -1,5 +1,7 @@
 package com.stu.system.service.impl;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 import com.stu.common.core.domain.entity.SysUser;
@@ -73,6 +75,11 @@ public class SysArchiveServiceImpl implements ISysArchiveService {
     @Override
     public int insertSysArchive(SysArchive sysArchive) {
         sysArchive.setCreateTime(DateUtils.getNowDate());
+        if (StringUtils.isNotNull(sysArchive.getReceiveDate())) {
+            LocalDate localDate = sysArchive.getReceiveDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            sysArchive.setYear(String.valueOf(localDate.getYear()));
+        }
+
         return sysArchiveMapper.insertSysArchive(sysArchive);
     }
 
@@ -84,6 +91,10 @@ public class SysArchiveServiceImpl implements ISysArchiveService {
      */
     @Override
     public int updateSysArchive(SysArchive sysArchive) {
+        if (StringUtils.isNotNull(sysArchive.getReceiveDate())) {
+            LocalDate localDate = sysArchive.getReceiveDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            sysArchive.setYear(String.valueOf(localDate.getYear()));
+        }
         return sysArchiveMapper.updateSysArchive(sysArchive);
     }
 
@@ -125,6 +136,10 @@ public class SysArchiveServiceImpl implements ISysArchiveService {
                 if (StringUtils.isNull(u)) {
                     BeanValidators.validateWithException(validator, item);
                     item.setCreateBy(operatorName);
+                    if (StringUtils.isNotNull(item.getReceiveDate())) {
+                        LocalDate localDate = item.getReceiveDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                        item.setYear(String.valueOf(localDate.getYear()));
+                    }
                     sysArchiveMapper.insertSysArchive(item);
                     successNum++;
                     successMsg.append("<br/>").append(successNum).append("、编号 ").append(item.getArchiveId()).append(" 导入成功");
@@ -132,6 +147,10 @@ public class SysArchiveServiceImpl implements ISysArchiveService {
                     BeanValidators.validateWithException(validator, item);
                     item.setArchiveId(u.getArchiveId());
                     item.setUpdateBy(operatorName);
+                    if (StringUtils.isNotNull(item.getReceiveDate())) {
+                        LocalDate localDate = item.getReceiveDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                        item.setYear(String.valueOf(localDate.getYear()));
+                    }
                     sysArchiveMapper.updateSysArchive(item);
                     successNum++;
                     successMsg.append("<br/>").append(successNum).append("、编号 ").append(item.getArchiveId()).append(" 更新成功");

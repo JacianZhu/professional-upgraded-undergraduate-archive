@@ -42,3 +42,26 @@ export function delArchiveInfo(archiveId) {
     method: 'delete'
   })
 }
+
+export function getAllHeadteacher() {
+  return request({
+    url: '/system/archiveInfo/getAllHeadTeacherList',
+    method: 'get'
+  })
+}
+
+export function getAllReceiveList() {
+  return request({
+    url: '/system/archiveInfo/getAllReceiveList',
+    method: 'get'
+  })
+}
+
+
+export function updateTeacherReceiveFlag(username) {
+  return request({
+    url: '/system/archiveInfo/updateTeacherReceiveFlag?username=' + username,
+    method: 'get',
+  })
+}
+
