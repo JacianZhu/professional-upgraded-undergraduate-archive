@@ -39,8 +39,8 @@
 
             <pagination
               style="position: relative; margin-top: 0;height: 40px;line-height: 40px;display: flex;justify-content: center;align-items: center"
-              small v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-              @pagination="initData" />
+              small v-show="total > 0" :total="total" :page.sync="queryParams.pageNum"
+              :limit.sync="queryParams.pageSize" @pagination="initData" />
           </el-col>
 
         </el-row>
@@ -49,7 +49,7 @@
 
     </el-row>
 
-    <el-row :gutter="32">
+    <el-row :gutter="32" v-if="roles != 'teacher'">
       <!--      <el-col :xs="24" :sm="24" :lg="8">-->
       <!--        <div class="chart-wrapper">-->
       <!--          <raddar-chart :line_char_data="raddar_chart"/>-->
@@ -128,6 +128,7 @@ export default {
 
     this.init()
     this.initData()
+    this.roles = this.$store.state.user.roles[0];
   },
   data() {
     return {
@@ -150,6 +151,8 @@ export default {
       line_char_data: {},
       raddar_chart: null,
       pie_char: {},
+      roles: ''
+
     }
   },
   methods: {
