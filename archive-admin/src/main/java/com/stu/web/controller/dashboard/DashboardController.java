@@ -1,14 +1,10 @@
 package com.stu.web.controller.dashboard;
 
 import com.stu.common.core.domain.AjaxResult;
-import com.stu.system.domain.SysAdmissionInfo;
-import com.stu.system.domain.SysClass;
-import com.stu.system.domain.SysCourierCompany;
-import com.stu.system.domain.SysHeadTeacher;
-import com.stu.system.service.ISysAdmissionInfoService;
-import com.stu.system.service.ISysClassService;
-import com.stu.system.service.ISysCourierCompanyService;
-import com.stu.system.service.ISysHeadTeacherService;
+import com.stu.common.core.domain.entity.SysUser;
+import com.stu.common.utils.SecurityUtils;
+import com.stu.system.domain.*;
+import com.stu.system.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +37,26 @@ public class DashboardController {
     private ISysClassService sysClassService;
 
     @Autowired
+    private ISysArchiveService sysArchiveService;
+
+    @Autowired
     private ISysCourierCompanyService sysCourierCompanyService;
 
 
     @GetMapping("/getStatisticData")
     public AjaxResult getStatisticData() {
         Map<String, Integer> map = new HashMap<>(16);
+        SysUser sysUser = SecurityUtils.getLoginUser().getUser();
+        if (sysUser.getRoles().get(0).getRoleId() == 3) {
+            map.put("student", sysAdmissionInfoService.selectSysAdmissionInfoList(new SysAdmissionInfo()).size());
+            SysArchive sysArchive = new SysArchive();
+            sysArchive.setRecipient(sysUser.getUserName());
+            List<SysArchive> sysArchives = sysArchiveService.selectSysArchiveList(sysArchive);
+            map.put("student", sysArchives.size());
+        } else {
+            map.put("student", sysAdmissionInfoService.selectSysAdmissionInfoList(new SysAdmissionInfo()).size());
+        }
         map.put("student", sysAdmissionInfoService.selectSysAdmissionInfoList(new SysAdmissionInfo()).size());
-        map.put("headTeacher", sysHeadTeacherService.selectSysHeadTeacherList(new SysHeadTeacher()).size());
         map.put("class", sysClassService.selectSysClassList(new SysClass()).size());
         map.put("courierCompany", sysCourierCompanyService.selectSysCourierCompanyList(new SysCourierCompany()).size());
         return AjaxResult.success(map);
